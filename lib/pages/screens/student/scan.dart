@@ -15,6 +15,32 @@ class ScanScreen extends StatefulWidget {
 class _ScanState extends State<ScanScreen> {
   String barcode = "";
 
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("You Scanned wrong QR Code. Contact the Lecturer."),
+
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+
+
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   initState() {
     super.initState();
@@ -99,13 +125,43 @@ class _ScanState extends State<ScanScreen> {
       String decrypt_data = xxtea.decryptToString(barcode,globals.key);
       debugPrint(decrypt_data);
 
-      List listOfBarcode = decrypt_data.split(":");
 
-      globals.currentCollection = listOfBarcode[0];
-      globals.courseCode = listOfBarcode[1];
-      globals.classCode = listOfBarcode[2];
 
-      syncToPreviousAttendance();
+        debugPrint("Decripting qr code");
+
+
+
+      try {
+
+        DocumentSnapshot snapshot= await Firestore.instance.collection("class").document("${globals.clas}").collection("lectureID_qrCode").document("$decrypt_data").get();
+        if (snapshot.data['class_code'] == "${globals.clas}")
+        {
+          globals.courseCode = snapshot.data['course_code'];
+          globals.currentCollection = snapshot.data['collection_name'];
+          syncToPreviousAttendance();
+        }
+        else
+        {debugPrint("Comparing global = ${globals.clas} : snapshot = ${snapshot.data['class_code']}");
+        _showDialog();
+
+        }
+
+
+
+      } catch (e) {
+        print(e.message);
+
+        _showDialog();
+      }
+
+
+
+
+
+
+
+
+
 //      present.updating(barcode);
 
     } on PlatformException catch (e) {

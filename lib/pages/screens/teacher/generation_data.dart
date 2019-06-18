@@ -26,16 +26,33 @@ class _GenerationState extends State<Generation> {
   Future addStudents(List studentId) async{
 
     globals.currentCollection = "attendance"; //find a method to create new collection names,
-    var currentCollection = globals.currentCollection;
+    String currentCollection = globals.currentCollection;
+    String collection1 = "users";
+    String collection2 = "previous_lecture";
+    String courseCode = globals.courseCode;
+    String classCode = globals.classCode;
+    String uid = globals.uid;
 
-    String str = "$currentCollection:${globals.courseCode}:${globals.classCode}";
-    globals.qrCode = xxtea.encryptToString(str,globals.key);
+
+    Map<String, String> qrDetail ={ "course_code" : courseCode,
+      "collection_name" : currentCollection,
+      "class_code" : classCode,
+
+    };
+
+
+
+    DocumentReference qrId = await Firestore.instance.collection("class").document(classCode).collection("lectureID_qrCode").add(qrDetail);
+    debugPrint("The New Document created with Id : ${qrId.documentID} ");
+
+    globals.qrId = "${qrId.documentID}";
+    globals.qrCode = xxtea.encryptToString(globals.qrId,globals.key);
     debugPrint(globals.qrCode);
 
 
 
 
-    var fireStore2 = Firestore.instance;
+
     for (int i = 0; i < studentId.length; i++) {
 
 
@@ -46,18 +63,13 @@ class _GenerationState extends State<Generation> {
 
 
 
-      DocumentReference docRef = await fireStore2.collection("$currentCollection").add(map);
+      DocumentReference docRef = await Firestore.instance.collection("$currentCollection").add(map);
       debugPrint("The New Document created with Id : ${docRef.documentID} ");
 
     }
 
 
 
-    String collection1 = "users";
-    String collection2 = "previous_lecture";
-    String courseCode = globals.courseCode;
-    String classCode = globals.classCode;
-    String uid = globals.uid;
 
 
 
@@ -65,7 +77,8 @@ class _GenerationState extends State<Generation> {
 
 
 
-    var fireStore3 = Firestore.instance;
+
+
 
 
 
@@ -77,7 +90,7 @@ class _GenerationState extends State<Generation> {
 
 
 
-    DocumentReference docRef = await fireStore3.collection("$collection1").document("$uid").collection("$collection2").add(map);
+    DocumentReference docRef = await Firestore.instance.collection("$collection1").document("$uid").collection("$collection2").add(map);
     debugPrint("The New Document created with Id : ${docRef.documentID} ");
 
 

@@ -6,6 +6,7 @@ String courseCode;
 int startAddingStudents = 0;
 int requiredStudents = 0;
 String post;
+String qrId;
 
 List studentId = [];
 

@@ -3,15 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
 void main() {
-  globals.qrCode = null;
-globals.classCode = null;
-globals.courseCode = null;
-globals.startAddingStudents = null;
-globals.requiredStudents = 0;
-globals.studentId.clear();
-globals.currentCollection = null;
-globals.key = "1234567890";
-
 
   runApp(MyApp());
 }

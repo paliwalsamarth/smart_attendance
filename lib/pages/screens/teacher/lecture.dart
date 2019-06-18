@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_attendance/pages/screens/teacher/info.dart';
 import 'package:smart_attendance/pages/screens/teacher/attendance.dart';
 import 'package:smart_attendance/pages/screens/teacher/generate.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:smart_attendance/pages/screens/Home/teacher1.dart';
+import 'package:smart_attendance/globals.dart' as globals;
 
 
 
@@ -50,7 +52,10 @@ class LectureState extends State<Lecture> {
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Yes"),
-              onPressed: () {
+              onPressed: () async {
+
+                Firestore.instance.collection("class").document("${globals.classCode}").collection("lectureID_qrCode").document("${globals.qrId}").delete();
+
                 Navigator.of(context).pop();
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => Teacher()),
