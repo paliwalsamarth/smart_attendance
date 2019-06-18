@@ -3,23 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
-class PreviousAttendance extends StatefulWidget {
+class PreviousLectures extends StatefulWidget {
 
-  const PreviousAttendance({ Key key }) : super(key: key);
+  const PreviousLectures({ Key key }) : super(key: key);
 
 
   @override
-  PreviousAttendanceState createState() => new PreviousAttendanceState();
+  PreviousLecturesState createState() => new PreviousLecturesState();
 
 }
 
-class PreviousAttendanceState extends State<PreviousAttendance>{
+class PreviousLecturesState extends State<PreviousLectures>{
 
-  PreviousAttendanceState({Key key, this.user});
+  PreviousLecturesState({Key key, this.user});
   final FirebaseUser user;
 
   String collection1 = "users";
-  String collection2 = "previous_attendance";
+  String collection2 = "previous_lecture";
   String uid = globals.uid;
 
 
@@ -27,7 +27,7 @@ class PreviousAttendanceState extends State<PreviousAttendance>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text('Attended Lectures')),
+      appBar: AppBar(title: Text('Lectures Taken')),
       body: _buildBody(context),
     );
   }
@@ -65,7 +65,8 @@ class PreviousAttendanceState extends State<PreviousAttendance>{
         ),
         child: ListTile(
           title: Text("Lecture Subject : ${record.course_code}"),
-          subtitle: Text("Attended on ${record.time_stamp}"),
+          subtitle:  Text("Class : ${record.class_code}                                         Taken on ${record.time_stamp}"),
+
 
 
 
@@ -80,13 +81,17 @@ class PreviousAttendanceState extends State<PreviousAttendance>{
 class Record {
   final String time_stamp;
   final String course_code;
+  final String class_code;
+
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['time_stamp'] != null),
         assert(map['course_code'] != null),
+        assert(map['class_code'] != null),
         time_stamp = map['time_stamp'],
-        course_code = map['course_code'];
+        course_code = map['course_code'],
+        class_code = map['class_code'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);

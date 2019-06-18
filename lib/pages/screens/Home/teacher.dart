@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smart_attendance/pages/screens/teacher/generate.dart';
+import 'package:smart_attendance/pages/screens/teacher/previous_lectures.dart';
 import 'package:smart_attendance/pages/screens/teacher/generation_data.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
@@ -41,7 +41,7 @@ Center teacherPage(DocumentSnapshot snapshot, BuildContext context) {
                 title: new FlatButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => SecondRoute()),
+                          builder: (context) => PreviousLectures()),
                       );
                     },
                     textColor: Colors.white70,

@@ -51,6 +51,38 @@ class _GenerationState extends State<Generation> {
 
     }
 
+
+
+    String collection1 = "users";
+    String collection2 = "previous_lecture";
+    String courseCode = globals.courseCode;
+    String classCode = globals.classCode;
+    String uid = globals.uid;
+
+
+
+
+
+
+
+    var fireStore3 = Firestore.instance;
+
+
+
+    Map<String, String> map ={ "time_stamp" : "${new DateTime.now()}",
+      "course_code" : "$courseCode",
+      "class_code" : "$classCode"
+
+    };
+
+
+
+    DocumentReference docRef = await fireStore3.collection("$collection1").document("$uid").collection("$collection2").add(map);
+    debugPrint("The New Document created with Id : ${docRef.documentID} ");
+
+
+
+
     Navigator.push(context, MaterialPageRoute(
                             builder: (context) => Lecture()
                         ),
