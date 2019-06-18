@@ -46,11 +46,12 @@ class LectureState extends State<Lecture> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Do you want to close attendance of this lecture?"),
+          title: new Text("Do you want to stop attendance of this lecture?"),
 
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
+
               child: new Text("Yes"),
               onPressed: () async {
 
@@ -87,7 +88,18 @@ class LectureState extends State<Lecture> {
             title: TextStyle(color: Colors.white),
           )),
       home: Scaffold(
+        appBar : AppBar(
+            title: Text("Click Icon to stop attendance"),
+            backgroundColor: Colors.red,
+            actions: <Widget>[
+        // action button
+        IconButton(
 
+        icon: Icon(Icons.close),
+        onPressed: () {
+          _showDialog();
+        },
+      ),]),
         body: _pageOptions[_selectedTab],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedTab,
