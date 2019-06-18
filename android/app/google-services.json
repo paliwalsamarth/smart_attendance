@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1063459791415",
+    "firebase_url": "https://smart-attendence-b0a31.firebaseio.com",
+    "project_id": "smart-attendence-b0a31",
+    "storage_bucket": "smart-attendence-b0a31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063459791415:android:97a65977d8fb1a72",
+        "android_client_info": {
+          "package_name": "in.co.bluesail.smart_attendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063459791415-num7t044ep4eckp5ajk9mrqt0q4qjr3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHtlT3ES5zHwMxxxOcHYlJe2d_s7P1shk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063459791415-num7t044ep4eckp5ajk9mrqt0q4qjr3c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
