@@ -48,9 +48,12 @@ class Home extends StatelessWidget {
 
       return adminPage(snapshot,context);}
      else if (snapshot.data['role'] == 'teacher') {
+      globals.name = snapshot.data['name'];
+      globals.post = snapshot.data['post'];
       return teacherPage(snapshot,context);}
     else if (snapshot.data['role'] == 'student') {
       globals.clas = snapshot.data['class'];
+      globals.name = snapshot.data['name'];
       globals.id = snapshot.data['id'];
       debugPrint("Reached getStud func");
       getStud();

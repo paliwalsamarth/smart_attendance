@@ -5,6 +5,7 @@ String classCode;
 String courseCode;
 int startAddingStudents = 0;
 int requiredStudents = 0;
+String post;
 
 List studentId = [];
 
@@ -18,3 +19,4 @@ String faculty;
 String programme;
 String sec;
 String uid;
+String name;

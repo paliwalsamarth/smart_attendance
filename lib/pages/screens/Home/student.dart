@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:smart_attendance/pages/screens/student/scan.dart';
 import 'package:smart_attendance/pages/screens/student/previous_attendance.dart';
-import 'package:smart_attendance/pages/screens/student/lecture.dart';
+import 'package:smart_attendance/pages/screens/student/profile.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
 
@@ -63,9 +63,9 @@ Center studentPage(DocumentSnapshot snapshot,BuildContext context) {
 //                            );
 //                          },
 
-                          onPressed: () {
-                            debugPrint("${globals.id}");
-//                            present.updating(globals.id);
+                          onPressed: () {Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => ProfilePage()),
+                          );
 
                           },
                           textColor: Colors.white70,
