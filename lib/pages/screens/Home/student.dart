@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:smart_attendance/pages/screens/student/scan.dart';
+import 'package:smart_attendance/pages/screens/student/previous_attendance.dart';
 import 'package:smart_attendance/pages/screens/student/lecture.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
@@ -46,7 +47,7 @@ Center studentPage(DocumentSnapshot snapshot,BuildContext context) {
                       title: new FlatButton(
                           onPressed: () {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => SecondRoute()),
+                                builder: (context) => PreviousAttendance()),
                             );
                           },
                           textColor: Colors.white70,
@@ -65,9 +66,6 @@ Center studentPage(DocumentSnapshot snapshot,BuildContext context) {
                           onPressed: () {
                             debugPrint("${globals.id}");
 //                            present.updating(globals.id);
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => Lecture()),
-                            );
 
                           },
                           textColor: Colors.white70,

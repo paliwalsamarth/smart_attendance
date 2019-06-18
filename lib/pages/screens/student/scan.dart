@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smart_attendance/pages/screens/student/lecture.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
@@ -19,17 +20,57 @@ class _ScanState extends State<ScanScreen> {
     super.initState();
   }
 
+  Future syncToPreviousAttendance() async{
+
+
+    String collection1 = "users";
+    String collection2 = "previous_attendance";
+    String courseCode = globals.courseCode;
+    String uid = globals.uid;
+
+
+
+
+
+
+
+    var fireStore2 = Firestore.instance;
+
+
+
+      Map<String, String> map ={ "time_stamp" : "${new DateTime.now()}",
+        "course_code" : "$courseCode"
+
+      };
+
+
+
+      DocumentReference docRef = await fireStore2.collection("$collection1").document("$uid").collection("$collection2").add(map);
+      debugPrint("The New Document created with Id : ${docRef.documentID} ");
+
+
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Lecture()
+    ),
+    );
+
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          title: new Text('QR Code Scanner'),
+          title: new Text('Please Scan the QR CODE'),
         ),
         body: new Center(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: new ListView(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: RaisedButton(
@@ -37,10 +78,14 @@ class _ScanState extends State<ScanScreen> {
                     textColor: Colors.white,
                     splashColor: Colors.blueGrey,
                     onPressed: scan,
-                    child: const Text('START CAMERA SCAN')
+                    child: const Text('Click here to scan QR code')
                 ),
               )
               ,
+
+
+
+
             ],
           ),
         ));
@@ -60,9 +105,7 @@ class _ScanState extends State<ScanScreen> {
       globals.courseCode = listOfBarcode[1];
       globals.classCode = listOfBarcode[2];
 
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => Lecture()),
-      );
+      syncToPreviousAttendance();
 //      present.updating(barcode);
 
     } on PlatformException catch (e) {

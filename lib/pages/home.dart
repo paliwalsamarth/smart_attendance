@@ -12,6 +12,7 @@ class Home extends StatelessWidget {
 
   get context => BuildContext;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +29,7 @@ class Home extends StatelessWidget {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (snapshot.hasData) {
+            globals.uid = user.uid;
             return checkRole(snapshot.data,context);
           }
           return LinearProgressIndicator();
