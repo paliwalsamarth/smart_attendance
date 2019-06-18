@@ -7,10 +7,9 @@
 //import 'package:smart_attendance/globals.dart' as globals;
 //
 //class Home extends StatelessWidget {
-//  const Home({Key key, this.user}) : super(key: key);
-//  final FirebaseUser user;
 //
-//  get context => BuildContext;
+//
+//
 //
 //
 //  @override

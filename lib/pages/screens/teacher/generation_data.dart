@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smart_attendance/pages/screens/teacher/generate.dart';
 import 'package:smart_attendance/pages/screens/teacher/lecture.dart';
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+
 import 'package:smart_attendance/globals.dart' as globals;
 import 'package:xxtea/xxtea.dart';
 
@@ -91,6 +91,9 @@ class _GenerationState extends State<Generation> {
 
 
   }
+
+
+
 
 
   @override
@@ -298,8 +301,8 @@ class _GenerationState extends State<Generation> {
                             ],
                           )),
                       onPressed: () {
-                        if (selectedClassCode != null &&
-                            selectedCourseCode != "Choose Class Code") {
+                        if (selectedCourseCode != null &&
+                            selectedClassCode != "Choose Class Code") {
                           globals.classCode = selectedClassCode;
                           globals.courseCode = selectedCourseCode;
                           getClassDetails();
@@ -314,7 +317,7 @@ class _GenerationState extends State<Generation> {
                           }
                         }
                         else {
-                          debugPrint("Having problem");
+                          debugPrint("Select above details to continue");
                         }
                       }
 

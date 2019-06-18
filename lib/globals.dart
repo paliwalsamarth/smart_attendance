@@ -20,3 +20,4 @@ String programme;
 String sec;
 String uid;
 String name;
+String role;

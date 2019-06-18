@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smart_attendance/pages/screens/student/info.dart';
 import 'package:smart_attendance/pages/screens/student/later.dart';
 import 'package:smart_attendance/pages/screens/student/present.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:smart_attendance/pages/screens/Home/student1.dart';
 
 class Lecture extends StatefulWidget {
   @override
@@ -10,6 +12,66 @@ class Lecture extends StatefulWidget {
   }
 }
 class LectureState extends State<Lecture> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    print("BACK BUTTON!"); // Do some stuff.
+    _showDialog();
+    return true;
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Do you want to quit lecture dashboard?"),
+
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => Student()),
+                );
+
+
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
   int _selectedTab = 0;
   final _pageOptions = [
     Present(),

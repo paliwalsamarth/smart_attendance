@@ -19,8 +19,11 @@ dev_dependencies:
   path_provider: ^1.1.0
   barcode_scan: ^1.0.0
   qr_flutter: ^2.1.0+55
-  crypto: ^2.0.6
+  sqflite: ^1.1.5
   xxtea: ^2.0.2
+  shared_preferences: ^0.5.3+1
+  back_button_interceptor: ^4.0.6
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

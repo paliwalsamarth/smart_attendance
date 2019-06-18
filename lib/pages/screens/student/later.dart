@@ -27,8 +27,5 @@ class _LaterPageState extends State<LaterPage> {
     );
   }
 
-  void navigateToSignIn(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(), fullscreenDialog: true));
-  }
 
 }
