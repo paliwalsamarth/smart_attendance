@@ -19,7 +19,7 @@ class Generation extends StatefulWidget {
 }
 
 class _GenerationState extends State<Generation> {
-  String selectedClassCode = "default" ;
+  String selectedClassCode = "Choose Class Code" ;
   String selectedCourseCode;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
 
@@ -160,12 +160,18 @@ class _GenerationState extends State<Generation> {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+
 //                          Icon(FontAwesomeIcons.coins,
 //                              size: 25.0, color: Color(0xff11b719)),
                           SizedBox(width: 50.0),
                           DropdownButton(
+
+
+
+
                             items: classCodes,
                             onChanged: (classCodeValue) {
+                              globals.studentId.clear();
                               final snackBar = SnackBar(
                                 content: Text(
                                   'Selected Class Code is $classCodeValue',
@@ -250,11 +256,11 @@ class _GenerationState extends State<Generation> {
                     debugPrint("inside build but outside else if : with  class code $selectedClassCode ");
                     if (!snapshot.hasData) {
                       const Text("Loading.....");
-                      debugPrint("inside if");
+                      debugPrint("inside if   current studentId lenght : ${globals.studentId.length}");
                       return new Container();
                     }
                     else if (globals.startAddingStudents ==1){
-                      debugPrint("inside else if: here length = ${snapshot.data.documents.length} : with  class code $selectedClassCode : and documents ${snapshot.data.documents}") ;
+                      debugPrint("inside else if: here length = ${snapshot.data.documents.length} : with  class code $selectedClassCode : and documents ${snapshot.data.documents}   current studentId lenght : ${globals.studentId.length}") ;
 
 
                       for (int i = 0; i < snapshot.data.documents.length; i++) {
@@ -292,16 +298,24 @@ class _GenerationState extends State<Generation> {
                             ],
                           )),
                       onPressed: () {
-
+                        if (selectedClassCode != null &&
+                            selectedCourseCode != "Choose Class Code") {
                           globals.classCode = selectedClassCode;
                           globals.courseCode = selectedCourseCode;
                           getClassDetails();
-                          globals.startAddingStudents =0;
+                          globals.startAddingStudents = 0;
 
-                          if(globals.studentId.length == globals.studentId.length) {
+                          if (globals.studentId.length ==
+                              globals.studentId.length) {
                             addStudents(globals.studentId);
                           }
-                          else { debugPrint("Having problem");}
+                          else {
+                            debugPrint("Having problem");
+                          }
+                        }
+                        else {
+                          debugPrint("Having problem");
+                        }
                       }
 
                   ) ],
