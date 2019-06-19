@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:smart_attendance/flutter_blue/widgets.dart';
 
-void main() {
-  runApp(new FlutterBlueApp());
-}
+
 
 class FlutterBlueApp extends StatefulWidget {
   FlutterBlueApp({Key key, this.title}) : super(key: key);

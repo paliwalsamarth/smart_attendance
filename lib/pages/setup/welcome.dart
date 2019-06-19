@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 import 'package:smart_attendance/pages/screens/Home/student1.dart';
 import 'package:smart_attendance/pages/screens/Home/teacher1.dart';
+import 'package:smart_attendance/flutter_blue/blue.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -25,6 +26,16 @@ class _WelcomePageState extends State<WelcomePage> {
           RaisedButton(
             onPressed: navigateToSignIn,
             child: Text('Get Started'),
+
+          ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => FlutterBlueApp()),
+              );
+
+            },
+            child: Text('Testing flutter_blue'),
 
           ),
         ],
