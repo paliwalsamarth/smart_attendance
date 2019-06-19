@@ -10,6 +10,8 @@ String qrId;
 String attendance_id;
 
 List studentId = [];
+List studentDocumentId = [];
+Map attendanceDetails = {};
 
 //for Students
 String id;

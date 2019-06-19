@@ -6,8 +6,8 @@ import 'package:smart_attendance/pages/screens/teacher/generate.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:smart_attendance/pages/screens/Home/teacher1.dart';
 import 'package:smart_attendance/globals.dart' as globals;
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+
+import 'package:smart_attendance/pages/screens/teacher/save_attendance.dart';
 
 
 
@@ -29,13 +29,16 @@ class LectureState extends State<Lecture> {
     BackButtonInterceptor.add(myInterceptor);
   }
 
+
+
+
   @override
-
-
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
+
+
 
   bool myInterceptor(bool stopDefaultButtonEvent) {
     print("BACK BUTTON!"); // Do some stuff.
@@ -124,6 +127,7 @@ class LectureState extends State<Lecture> {
     GenerateScreen(),
     Info(),
     Attendance(),
+    SaveAttendance(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -147,7 +151,18 @@ class LectureState extends State<Lecture> {
         },
       ),]),
         body: _pageOptions[_selectedTab],
-        bottomNavigationBar: BottomNavigationBar(
+        bottomNavigationBar: new Theme(
+    data: Theme.of(context).copyWith(
+    // sets the background color of the `BottomNavigationBar`
+    canvasColor: Colors.green,
+    // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+    primaryColor: Colors.red,
+    textTheme: Theme
+        .of(context)
+        .textTheme
+        .copyWith(caption: new TextStyle(color: Colors.yellow))),
+        child : new BottomNavigationBar(
+
           currentIndex: _selectedTab,
           onTap: (int index) {
             setState(() {
@@ -167,8 +182,13 @@ class LectureState extends State<Lecture> {
               icon: Icon(Icons.search),
               title: Text('ATTENDENCE'),
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.file_download),
+
+              title: Text('DOWNLOAD'),
+            ),
           ],
         ),
       ),
-    );
+    ));
   }}
