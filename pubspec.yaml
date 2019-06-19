@@ -23,7 +23,7 @@ dev_dependencies:
   xxtea: ^2.0.2
   shared_preferences: ^0.5.3+1
   back_button_interceptor: ^4.0.6
-
+  flutter_blue: ^0.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
