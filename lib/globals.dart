@@ -7,6 +7,7 @@ int startAddingStudents = 0;
 int requiredStudents = 0;
 String post;
 String qrId;
+String attendance_id;
 
 List studentId = [];
 

@@ -85,9 +85,10 @@ class _GenerationState extends State<Generation> {
     String courseCode = globals.courseCode;
     String classCode = globals.classCode;
     String uid = globals.uid;
-
+    String aid = globals.attendance_id;
 
     Map<String, String> qrDetail ={ "course_code" : courseCode,
+      "attendance_id" : aid,
       "collection_name" : currentCollection,
       "class_code" : classCode,
 
@@ -116,7 +117,7 @@ class _GenerationState extends State<Generation> {
 
 
 
-      DocumentReference docRef = await Firestore.instance.collection("$currentCollection").add(map);
+      DocumentReference docRef = await Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").add(map);
       debugPrint("The New Document created with Id : ${docRef.documentID} ");
 
     }

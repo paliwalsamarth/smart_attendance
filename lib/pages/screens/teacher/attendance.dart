@@ -32,7 +32,7 @@ class AttendanceState extends State<Attendance>{
   Widget _buildBody(BuildContext context) {
     debugPrint("inside _buildBody");
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('$currentCollection').snapshots(),
+      stream: Firestore.instance.collection('attendance').document("${globals.attendance_id}").collection("attendance").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -78,7 +78,7 @@ class AttendanceState extends State<Attendance>{
       return "Present";
     }
     else if(attendance == "Present") { return "Absent"; }
-    else return "Absent";
+    else return "Present / Absent";
   }
 }
 

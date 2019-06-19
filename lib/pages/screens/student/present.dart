@@ -37,7 +37,9 @@ class PresentState extends State<Present>{
     debugPrint("inside _buildBody");
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection("$currentCollection")
+          .collection("attendance")
+      .document("${globals.attendance_id}")
+      .collection("attendance")
           .where('id',
           isEqualTo: "$id")  // here instead of Search field should be our id , which we should get after login
           .snapshots(),

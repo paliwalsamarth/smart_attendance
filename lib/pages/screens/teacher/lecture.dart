@@ -6,6 +6,8 @@ import 'package:smart_attendance/pages/screens/teacher/generate.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:smart_attendance/pages/screens/Home/teacher1.dart';
 import 'package:smart_attendance/globals.dart' as globals;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 
 
@@ -28,6 +30,8 @@ class LectureState extends State<Lecture> {
   }
 
   @override
+
+
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
@@ -50,6 +54,20 @@ class LectureState extends State<Lecture> {
 
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
+
+            new FlatButton(
+
+              child: new Text("No"),
+              onPressed: ()  {
+
+
+                Navigator.of(context).pop();
+
+
+
+
+              },
+            ),
             new FlatButton(
 
               child: new Text("Yes"),
@@ -57,14 +75,42 @@ class LectureState extends State<Lecture> {
 
                 Firestore.instance.collection("class").document("${globals.classCode}").collection("lectureID_qrCode").document("${globals.qrId}").delete();
 
+                Firestore.instance.collection('attendance').document("${globals.attendance_id}").collection("attendance").getDocuments().then((snapshot) {
+                  for (DocumentSnapshot ds in snapshot.documents){
+
+                    ds.reference.delete();
+                  }});
+
+
+                Map<String, String> map ={ "id" : "Enrollment No.",
+                  "attendance" : "Present / Absent"
+
+                };
+
+                DocumentReference docRef = await Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").add(map);
+                debugPrint("The New Document created with Id : ${docRef.documentID} ");
+
+          
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => Teacher()),
                 );
 
 
+
+
+
+
+
+
               },
             ),
+
+
+
+
+
           ],
         );
       },

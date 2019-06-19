@@ -138,6 +138,7 @@ class _ScanState extends State<ScanScreen> {
         {
           globals.courseCode = snapshot.data['course_code'];
           globals.currentCollection = snapshot.data['collection_name'];
+          globals.attendance_id = snapshot.data['attendance_id'];
           syncToPreviousAttendance();
         }
         else

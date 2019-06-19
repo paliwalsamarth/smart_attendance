@@ -52,6 +52,7 @@ class _LoginState extends State<Login> {
         globals.name = snapshot.data['name'];
         globals.post = snapshot.data['post'];
         globals.role = snapshot.data['role'];
+        globals.attendance_id = snapshot.data['attendance_id'];
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Teacher()),
         );

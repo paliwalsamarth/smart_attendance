@@ -31,7 +31,7 @@ class _WelcomePageState extends State<WelcomePage> {
           RaisedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => FlutterBlueApp()),
+                  builder: (context) => BluetoothApp()),
               );
 
             },
