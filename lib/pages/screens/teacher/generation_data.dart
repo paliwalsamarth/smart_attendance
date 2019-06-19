@@ -23,6 +23,59 @@ class _GenerationState extends State<Generation> {
   String selectedCourseCode;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
 
+
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Do you want to start the lecture?"),
+
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+
+              child: new Text("No"),
+              onPressed: () async {
+
+                Navigator.of(context).pop();
+
+
+
+
+
+              },
+            ),
+            new FlatButton(
+
+              child: new Text("Yes"),
+              onPressed: () async {
+
+                Navigator.of(context).pop();
+                addStudents(globals.studentId);
+
+
+
+
+              },
+            ),
+
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
+
+
+
+
   Future addStudents(List studentId) async{
 
     globals.currentCollection = "attendance"; //find a method to create new collection names,
@@ -323,7 +376,8 @@ class _GenerationState extends State<Generation> {
 
                           if (globals.studentId.length ==
                               globals.studentId.length) {
-                            addStudents(globals.studentId);
+                            _showDialog();
+
                           }
                           else {
                             debugPrint("Having problem");
