@@ -1,6 +1,6 @@
-import 'package:smart_attendance/pages/setup/welcome.dart';
+import 'package:smart_attendance/pages/welcome.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_attendance/globals.dart' as globals;
+//import 'package:smart_attendance/globals.dart' as globals;
 
 void main() {
 
