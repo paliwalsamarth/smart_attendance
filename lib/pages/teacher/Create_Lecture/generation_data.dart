@@ -112,7 +112,8 @@ class _GenerationState extends State<Generation> {
 
 
       Map<String, String> map ={ "id" : studentId[i],
-                  "attendance" : "Absent"
+                  "attendance" : "Absent",
+        "document" : "default"
 
       };
 
@@ -121,6 +122,7 @@ class _GenerationState extends State<Generation> {
       DocumentReference docRef = await Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").add(map);
       debugPrint("The New Document created with Id : ${docRef.documentID} ");
       globals.studentDocumentId.insert(i, "${docRef.documentID}");
+      Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").document("${docRef.documentID}").updateData({"document" : "${docRef.documentID}"});
 
 
     }
@@ -376,6 +378,7 @@ class _GenerationState extends State<Generation> {
                           globals.classCode = selectedClassCode;
                           globals.courseCode = selectedCourseCode;
                           getClassDetails();
+                          getCourseDetails();
                           globals.startAddingStudents = 0;
 
                           if (globals.studentId.length ==
@@ -401,7 +404,7 @@ class _GenerationState extends State<Generation> {
 }
 
 getClassDetails() async {
-  debugPrint("Inside getStud func");
+  debugPrint("Inside getClass func");
 
   DocumentSnapshot snapshot= await Firestore.instance.collection('class').document('${globals.classCode}').get();
   if (snapshot.data == null) {debugPrint("No data in class > classcode");}
@@ -413,3 +416,12 @@ getClassDetails() async {
   globals.sec = snapshot.data['sec'];
 }}
 
+getCourseDetails() async {
+  debugPrint("Inside getCourse func");
+
+  DocumentSnapshot snapshot= await Firestore.instance.collection('course').document('${globals.courseCode}').get();
+  if (snapshot.data == null) {debugPrint("No data in course > coursecode");}
+  else{
+    globals.courseName = snapshot.data['name'];
+    globals.courseYear = snapshot.data['year'];
+  }}

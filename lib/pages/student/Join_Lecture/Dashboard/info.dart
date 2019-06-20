@@ -1,69 +1,67 @@
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:smart_attendance/pages/home.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:smart_attendance/pages/screens/Home/student.dart';
-//import 'package:smart_attendance/pages/screens/Home/admin.dart';
-//import 'package:smart_attendance/pages/teacher/home.dart';
+//import 'package:flutter/material.dart';
+//import 'package:flutter/services.dart';
+//import 'package:smart_attendance/theme/style.dart';
+
+//import 'package:smart_attendance/components/TextFields/inputField.dart';
+//import 'package:smart_attendance/components/Buttons/textButton.dart';
+//import 'package:smart_attendance/components/Buttons/roundedButton.dart';
+import 'package:smart_attendance/services/validations.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
-class Info extends StatelessWidget {
-  const Info({Key key, this.user}) : super(key: key);
-  final FirebaseUser user;
+class Info extends StatefulWidget {
+  @override
+  _InfoState createState() => new _InfoState();
+}
 
-  get context => BuildContext;
+class _InfoState extends State<Info> {
+//  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+//  String _email, _password;
+//  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+//  void showInSnackBar(String value) {
+//    _scaffoldKey.currentState
+//        .showSnackBar(new SnackBar(content: new Text(value)));
+//  }
+
+  bool autovalidate = false;
+  Validations validations = new Validations();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-      ),
-      body:
 
-      StreamBuilder<DocumentSnapshot>(
-        stream: Firestore.instance
-            .collection('course')
-            .document(globals.courseCode)
-            .snapshots(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            return displayCourseDetails(snapshot.data,context);
-          }
-          return LinearProgressIndicator();
-        },
-      ),
-
-
-    );
-  }
-
-  Center displayCourseDetails(DocumentSnapshot snapshot,BuildContext context) {
-    if (snapshot.data == null) {
-      return Center(
-        child: Text('no data set in the class details in firestore'),
-      );
-    }
-    return Center(
-        child: Column(
+    return new Scaffold(
+        appBar: AppBar(
+          title: Text('About Lecture'),
+        ),
+        body: ListView(
           children: <Widget>[
-            Text("Course code : ${globals.courseCode}"),
-            Text("Course name : ${snapshot.data['name']}"),
-            Text("Course year : ${snapshot.data['year']}"),
-            Text("Class code : ${globals.classCode}"),
-            Text("Faculty : ${globals.faculty}"),
-            Text("Program : ${globals.programme}"),
-            Text("Branch : ${globals.branch}"),
-            Text("Section : ${globals.sec}"),
+            Center (child: Text("Lecturer :-")),
+            Card(
+              child: ListTile(
+                leading: FlutterLogo(size: 56.0),
+                title: Text('${globals.lecturerName}'),
+                subtitle: Text('${globals.post}'),
+
+              ),
+            ),
+            SizedBox(height: 40.0),
+            Center (child: Text("Lecture Details :-")),
+
+            Card(child: ListTile(title: Text("Course Code   :  ${globals.courseCode}"))),
+            Card(child: ListTile(title: Text("Course Name  :  ${globals.courseName}"))),
+            Card(child: ListTile(title: Text("Course Year :  ${globals.courseYear}"))),
+            Card(child: ListTile(title: Text("Class Code  :  ${globals.clas}"))),
+            Card(child: ListTile(title: Text("Faculty  :  ${globals.faculty}"))),
+            Card(child: ListTile(title: Text("Programe  :  ${globals.programme}"))),
+            Card(child: ListTile(title: Text("Branch  :  ${globals.branch}"))),
+            Card(child: ListTile(title: Text("Section  :  ${globals.sec}"))),
           ],
         )
-
-
-    );}
-
-
+    );
+  }
 
 
 }

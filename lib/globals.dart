@@ -8,6 +8,8 @@ int requiredStudents = 0;
 String post;
 String qrId;
 String attendance_id;
+String courseName;
+String courseYear;
 
 List studentId = [];
 List studentDocumentId = [];
@@ -25,3 +27,5 @@ String sec;
 String uid;
 String name;
 String role;
+String lecturerName;
+String docId;

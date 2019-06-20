@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 import 'package:xxtea/xxtea.dart';
 
+
+String docId;
+
 class ScanScreen extends StatefulWidget {
   @override
   _ScanState createState() => new _ScanState();
@@ -15,7 +18,7 @@ class ScanScreen extends StatefulWidget {
 class _ScanState extends State<ScanScreen> {
   String barcode = "";
 
-  void _showDialog() {
+  void _showDialogWrong() {
     // flutter defined function
     showDialog(
       context: context,
@@ -23,6 +26,32 @@ class _ScanState extends State<ScanScreen> {
         // return object of type Dialog
         return AlertDialog(
           title: new Text("You Scanned wrong QR Code. Contact the Lecturer."),
+
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+
+
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialogTryAgain() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Oops! try again and hold your device correctly"),
 
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -139,11 +168,15 @@ class _ScanState extends State<ScanScreen> {
           globals.courseCode = snapshot.data['course_code'];
           globals.currentCollection = snapshot.data['collection_name'];
           globals.attendance_id = snapshot.data['attendance_id'];
-          syncToPreviousAttendance();
+          getCourseDetails();
+          getLecturerDetails();
+          giveAttendance();
+
+//          syncToPreviousAttendance();
         }
         else
         {debugPrint("Comparing global = ${globals.clas} : snapshot = ${snapshot.data['class_code']}");
-        _showDialog();
+        _showDialogWrong();
 
         }
 
@@ -152,7 +185,7 @@ class _ScanState extends State<ScanScreen> {
       } catch (e) {
         print(e.message);
 
-        _showDialog();
+        _showDialogWrong();
       }
 
 
@@ -179,4 +212,66 @@ class _ScanState extends State<ScanScreen> {
       setState(() => this.barcode = 'Unknown error: $e');
     }
   }
+
+
+
+
+getLecturerDetails() async {
+  debugPrint("Inside getClass func");
+
+  DocumentSnapshot snapshot= await Firestore.instance.collection('attendance').document('${globals.attendance_id}').get();
+  if (snapshot.data == null) {debugPrint("No data in class > classcode");}
+  else{
+    globals.lecturerName = snapshot.data['name'];
+    globals.post = snapshot.data['post'];
+  }}
+
+getCourseDetails() async {
+  debugPrint("Inside getCourse func");
+
+  DocumentSnapshot snapshot= await Firestore.instance.collection('course').document('${globals.courseCode}').get();
+  if (snapshot.data == null) {debugPrint("No data in course > coursecode");}
+  else{
+    globals.courseName = snapshot.data['name'];
+    globals.courseYear = snapshot.data['year'];
+  }}
+
+  giveAttendance() async{
+  try{
+String attendanceId = globals.attendance_id;
+
+     Firestore.instance
+        .collection("attendance")
+        .document("$attendanceId")
+        .collection("attendance")
+        .where('id',
+        isEqualTo: "${globals.id}").getDocuments().then((string){ string.documents.forEach((doc) => docId = doc.data.toString());}  );
+     List docId1 = docId.split(",");
+     String docId2 = docId1[0];
+     List docId3 = docId2.split("-");
+     globals.docId = "-${docId3[1]}";
+     debugPrint(" ${globals.docId}");
+
+
+
+Firestore.instance
+    .collection("attendance")
+    .document("$attendanceId")
+    .collection("attendance")
+    .document("${globals.docId}")
+    .updateData({"attendance" : "Present"});
+
+
+
+
+
+syncToPreviousAttendance();
+  }
+catch(e){
+  print('Caught Firestore exception1');
+  print(e);
+  _showDialogTryAgain();
 }
+
+
+}}

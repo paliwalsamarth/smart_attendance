@@ -72,24 +72,18 @@ class PresentState extends State<Present>{
 
         child: ListTile(
           title: Text("${record.id}  : ${record.attendance}"),
-          subtitle: Text("Click here to update your attendance"),
+          subtitle: Text("If it shows Absent here please contact your lecturer"),
 
 
-          onTap: () => record.reference.updateData(
-              {
-                'attendance': tongle(record.attendance) }
+
 
           ),
         ),
-      ),
-    );
-  }
-
-  String tongle(String attendance) {
-
-      return "Present";
+      );
 
   }
+
+
 }
 
 class Record {
