@@ -1,13 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smart_attendance/pages/home.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:smart_attendance/pages/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:smart_attendance/theme/style.dart';
+//import 'package:flutter/material.dart';
+//import 'package:flutter/services.dart';
+//import 'package:smart_attendance/theme/style.dart';
 
-import 'package:smart_attendance/components/TextFields/inputField.dart';
-import 'package:smart_attendance/components/Buttons/textButton.dart';
-import 'package:smart_attendance/components/Buttons/roundedButton.dart';
+//import 'package:smart_attendance/components/TextFields/inputField.dart';
+//import 'package:smart_attendance/components/Buttons/textButton.dart';
+//import 'package:smart_attendance/components/Buttons/roundedButton.dart';
 import 'package:smart_attendance/services/validations.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
@@ -17,9 +17,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _email, _password;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+//  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+//  String _email, _password;
+//  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 //  void showInSnackBar(String value) {
 //    _scaffoldKey.currentState

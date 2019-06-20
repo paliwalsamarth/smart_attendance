@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smart_attendance/pages/screens/Home/student.dart';
-import 'package:smart_attendance/pages/screens/Home/admin.dart';
-import 'package:smart_attendance/pages/screens/Home/teacher.dart';
+//import 'package:smart_attendance/pages/screens/Home/student.dart';
+//import 'package:smart_attendance/pages/screens/Home/admin.dart';
+//import 'package:smart_attendance/pages/teacher/home.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
 class Info extends StatelessWidget {

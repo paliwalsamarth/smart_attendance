@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_attendance/pages/screens/student/info.dart';
-import 'package:smart_attendance/pages/screens/student/later.dart';
-import 'package:smart_attendance/pages/screens/student/present.dart';
+import 'package:smart_attendance/pages/student/Join_Lecture/Dashboard/info.dart';
+import 'package:smart_attendance/pages/student/Join_Lecture/Dashboard/later.dart';
+import 'package:smart_attendance/pages/student/Join_Lecture/Dashboard/present.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:smart_attendance/pages/screens/Home/student1.dart';
+import 'package:smart_attendance/pages/student/home.dart';
 
 class Lecture extends StatefulWidget {
   @override

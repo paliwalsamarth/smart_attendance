@@ -5,7 +5,7 @@
 //import 'package:smart_attendance/components/TextFields/inputField.dart';
 //import 'package:smart_attendance/components/Buttons/textButton.dart';
 //import 'package:smart_attendance/components/Buttons/roundedButton.dart';
-//import 'package:smart_attendance/services/authentication.dart';
+
 //import 'package:smart_attendance/services/validations.dart';
 //
 //class LoginScreen extends StatefulWidget {

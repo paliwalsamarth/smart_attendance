@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smart_attendance/pages/screens/student/lecture.dart';
+import 'package:smart_attendance/pages/student/Join_Lecture/Dashboard/lecture.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

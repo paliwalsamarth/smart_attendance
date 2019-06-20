@@ -1,10 +1,10 @@
-import 'package:smart_attendance/pages/screens/Login/login1.dart';
-import 'package:xxtea/xxtea.dart';
+import 'package:smart_attendance/pages/Login/login1.dart';
+//import 'package:xxtea/xxtea.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_attendance/globals.dart' as globals;
-import 'package:smart_attendance/pages/screens/Home/student1.dart';
-import 'package:smart_attendance/pages/screens/Home/teacher1.dart';
-import 'package:smart_attendance/flutter_blue/blue.dart';
+import 'package:smart_attendance/pages/student/home.dart';
+import 'package:smart_attendance/pages/teacher//home.dart';
+
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -25,19 +25,10 @@ class _WelcomePageState extends State<WelcomePage> {
           Text("Space Left for app logo and background image"),
           RaisedButton(
             onPressed: navigateToSignIn,
-            child: Text('Get Started'),
+            child: Text('Log in with Institute provided details'),
 
           ),
-          RaisedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => BluetoothApp()),
-              );
 
-            },
-            child: Text('Testing flutter_blue'),
-
-          ),
         ],
       ),
     );
