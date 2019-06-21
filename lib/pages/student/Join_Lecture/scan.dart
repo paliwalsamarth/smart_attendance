@@ -240,12 +240,14 @@ getCourseDetails() async {
   try{
 String attendanceId = globals.attendance_id;
 
-     Firestore.instance
+     await Firestore.instance
         .collection("attendance")
         .document("$attendanceId")
         .collection("attendance")
         .where('id',
-        isEqualTo: "${globals.id}").getDocuments().then((string){ string.documents.forEach((doc) => docId = doc.data.toString());}  );
+        isEqualTo: "${globals.id}").getDocuments().then((string){ string.documents.forEach((doc) async => docId  = doc.data.toString());}  );
+
+
      List docId1 = docId.split(",");
      String docId2 = docId1[0];
      List docId3 = docId2.split("-");
@@ -254,7 +256,7 @@ String attendanceId = globals.attendance_id;
 
 
 
-Firestore.instance
+await Firestore.instance
     .collection("attendance")
     .document("$attendanceId")
     .collection("attendance")
@@ -265,7 +267,7 @@ Firestore.instance
 
 
 
-syncToPreviousAttendance();
+await syncToPreviousAttendance();
   }
 catch(e){
   print('Caught Firestore exception1');
