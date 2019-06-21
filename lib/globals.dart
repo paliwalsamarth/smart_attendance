@@ -14,6 +14,8 @@ String courseYear;
 List studentId = [];
 List studentDocumentId = [];
 Map attendanceDetails = {};
+List extraStudentDocumentId = [];
+
 
 //for Students
 String id;
