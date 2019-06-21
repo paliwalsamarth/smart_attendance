@@ -160,7 +160,7 @@ checking(BuildContext context) async {
     for (int i = 1; i < globals.extraStudentDocumentId.length; i++) {
       debugPrint(" deleting ${globals.extraStudentDocumentId[i]}");
       Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").document(globals.extraStudentDocumentId[i]).delete();
-    } 
+    }
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => Generation()),
     );

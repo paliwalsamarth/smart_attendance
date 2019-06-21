@@ -19,7 +19,8 @@ class Generation extends StatefulWidget {
 }
 
 class _GenerationState extends State<Generation> {
-  String selectedClassCode = "Choose Class Code" ;
+  String selectedClassCode;
+//  = "Choose Class Code" ;
   String selectedCourseCode;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
 
@@ -208,13 +209,13 @@ class _GenerationState extends State<Generation> {
                   stream: Firestore.instance.collection("class").snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)
-                      const Text("Loading.....");
+                      return new Container(width: 0.0, height: 0.0);
                     else {
 
 
 
-                      if((globals.requiredStudents > globals.studentId.length) || (globals.requiredStudents == 0)){
-                      globals.startAddingStudents = 1;}
+//                      if((globals.requiredStudents > globals.studentId.length) || (globals.requiredStudents == 0)){
+//                      globals.startAddingStudents = 1;}
 
 
 
@@ -276,7 +277,7 @@ class _GenerationState extends State<Generation> {
                   stream: Firestore.instance.collection("course").snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)
-                      const Text("Loading.....");
+                      return new Container(width: 0.0, height: 0.0);
                     else {
                       List<DropdownMenuItem> courseCodes = [];
                       for (int i = 0; i < snapshot.data.documents.length; i++) {
@@ -325,41 +326,41 @@ class _GenerationState extends State<Generation> {
               SizedBox(
                 height: 150.0,
               ),
-              StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance.collection(selectedClassCode).snapshots(),
-                  builder: (context, snapshot) {
-                    debugPrint("inside build but outside else if : with  class code $selectedClassCode ");
-                    if (!snapshot.hasData) {
-                      const Text("Loading.....");
-                      debugPrint("inside if   current studentId lenght : ${globals.studentId.length}");
-                      return new Container();
-                    }
-                    else if (globals.startAddingStudents ==1){
-                      debugPrint("inside else if: here length = ${snapshot.data.documents.length} : with  class code $selectedClassCode : and documents ${snapshot.data.documents}   current studentId lenght : ${globals.studentId.length}") ;
-
-
-                      for (int i = 0; i < snapshot.data.documents.length; i++) {
-                        DocumentSnapshot snap = snapshot.data.documents[i];
-                        globals.studentId.insert(i, "${snap.documentID}");
-                       debugPrint("added student $i ${snap.documentID}");
-                        debugPrint("current studentId lenght : ${globals.studentId.length}");
-                        debugPrint("current studentId var : ${globals.studentId}");
-
-                        globals.requiredStudents = snapshot.data.documents.length;
-                        globals.startAddingStudents =0;
-                      }
-                      return new Container();
-                    }
-
-                    else {
-                      debugPrint("nothing goes here : with  class code $selectedClassCode ");
-                      debugPrint("current studentId lenght : ${globals.studentId.length}");
-                      return new Container();
-                    }
-                    }),
-              SizedBox(
-                height: 10.0,
-              ),
+//              StreamBuilder<QuerySnapshot>(
+//                  stream: Firestore.instance.collection(selectedClassCode).snapshots(),
+//                  builder: (context, snapshot) {
+//                    debugPrint("inside build but outside else if : with  class code $selectedClassCode ");
+//                    if (!snapshot.hasData) {
+//                      const Text("Loading.....");
+//                      debugPrint("inside if   current studentId lenght : ${globals.studentId.length}");
+//                      return new Container();
+//                    }
+//                    else if (globals.startAddingStudents ==1){
+//                      debugPrint("inside else if: here length = ${snapshot.data.documents.length} : with  class code $selectedClassCode : and documents ${snapshot.data.documents}   current studentId lenght : ${globals.studentId.length}") ;
+//
+//
+//                      for (int i = 0; i < snapshot.data.documents.length; i++) {
+//                        DocumentSnapshot snap = snapshot.data.documents[i];
+//                        globals.studentId.insert(i, "${snap.documentID}");
+//                       debugPrint("added student $i ${snap.documentID}");
+//                        debugPrint("current studentId lenght : ${globals.studentId.length}");
+//                        debugPrint("current studentId var : ${globals.studentId}");
+//
+//                        globals.requiredStudents = snapshot.data.documents.length;
+//                        globals.startAddingStudents =0;
+//                      }
+//                      return new Container();
+//                    }
+//
+//                    else {
+//                      debugPrint("nothing goes here : with  class code $selectedClassCode ");
+//                      debugPrint("current studentId lenght : ${globals.studentId.length}");
+//                      return new Container();
+//                    }
+//                    }),
+//              SizedBox(
+//                height: 10.0,
+//              ),
 //
                    RaisedButton(
                       color: Color(0xff11b719),
@@ -377,8 +378,24 @@ class _GenerationState extends State<Generation> {
                             selectedClassCode != "Choose Class Code") {
 
 
+    final QuerySnapshot querySnapshot = await Firestore.instance.collection("$selectedClassCode").getDocuments();
 
-                            globals.classCode = selectedClassCode;
+    debugPrint(" length : ${querySnapshot.documents.length}");
+
+
+
+    globals.studentId.clear();
+
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+    globals.studentId.insert(i, "${querySnapshot.documents[i].documentID}");
+    }
+
+
+
+
+
+
+    globals.classCode = selectedClassCode;
                             globals.courseCode = selectedCourseCode;
                             getClassDetails();
                             getCourseDetails();
