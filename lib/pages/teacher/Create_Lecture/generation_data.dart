@@ -20,10 +20,10 @@ class Generation extends StatefulWidget {
 
 class _GenerationState extends State<Generation> {
   String selectedClassCode;
+
 //  = "Choose Class Code" ;
   String selectedCourseCode;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
-
 
 
   void _showDialog() {
@@ -41,26 +41,15 @@ class _GenerationState extends State<Generation> {
 
               child: new Text("No"),
               onPressed: () async {
-
                 Navigator.of(context).pop();
-
-
-
-
-
               },
             ),
             new FlatButton(
 
               child: new Text("Yes"),
               onPressed: () async {
-
                 Navigator.of(context).pop();
-                addStudents(globals.studentId);
-
-
-
-
+                getClassDetails();
               },
             ),
 
@@ -71,121 +60,101 @@ class _GenerationState extends State<Generation> {
   }
 
 
+  Future createQrDocument() async {
+    debugPrint("i am here");
 
 
-
-
-
-
-  Future addStudents(List studentId) async{
-
-    globals.currentCollection = "attendance"; //find a method to create new collection names,
-    String currentCollection = globals.currentCollection;
-    String collection1 = "users";
-    String collection2 = "previous_lecture";
-    String courseCode = globals.courseCode;
-    String classCode = globals.classCode;
-    String uid = globals.uid;
-    String aid = globals.attendance_id;
-
-    Map<String, String> qrDetail ={ "course_code" : courseCode,
-      "attendance_id" : aid,
-      "collection_name" : currentCollection,
-      "class_code" : classCode,
+    Map<String, String> qrDetail = { "course_code": globals.courseCode,
+      "attendance_id": globals.attendance_id,
+      "collection_name": "attendance",
+      "class_code": globals.classCode,
 
     };
 
+    debugPrint("map made");
+    debugPrint("classCode : ${globals.classCode}");
 
-
-    DocumentReference qrId = await Firestore.instance.collection("class").document(classCode).collection("lectureID_qrCode").add(qrDetail);
+    DocumentReference qrId = await Firestore.instance.collection("class")
+        .document(globals.classCode).collection("lectureID_qrCode")
+        .add(qrDetail);
     debugPrint("The New Document created with Id : ${qrId.documentID} ");
 
     globals.qrId = "${qrId.documentID}";
-    globals.qrCode = xxtea.encryptToString(globals.qrId,globals.key);
+    globals.qrCode = xxtea.encryptToString(globals.qrId, globals.key);
     debugPrint(globals.qrCode);
 
+    debugPrint("qr code made");
+    addStudents();
 
+  }
 
-
+  Future addStudents() async {
+    List studentId = globals.studentId;
     globals.studentDocumentId.clear();
 
     for (int i = 0; i < studentId.length; i++) {
-
-
-      Map<String, String> map ={ "id" : studentId[i],
-                  "attendance" : "Absent",
-        "document" : "default"
+      Map<String, String> map = { "id": studentId[i],
+        "attendance": "Absent"
+//        "document" : "default"
 
       };
 
 
-
-      DocumentReference docRef = await Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").add(map);
+      DocumentReference docRef = await Firestore.instance.collection(
+          "attendance").document("${globals.attendance_id}").collection(
+          "attendance").add(map);
       debugPrint("The New Document created with Id : ${docRef.documentID} ");
       globals.studentDocumentId.insert(i, "${docRef.documentID}");
-      Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").document("${docRef.documentID}").updateData({"document" : "${docRef.documentID}"});
+//      Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance").document("${docRef.documentID}").updateData({"document" : "${docRef.documentID}"});
 
 
     }
 
 
+    debugPrint("attendance list created");
+    updatePreviousLectures();
+  }
+  Future updatePreviousLectures() async {
 
 
-
-
-
-
-
-
-
-
-
-
-
-    Map<String, String> map ={ "time_stamp" : "${new DateTime.now()}",
-      "course_code" : "$courseCode",
-      "class_code" : "$classCode"
-
+    Map<String, String> map = { "time_stamp": "${new DateTime.now()}",
+      "course_code": "${globals.courseCode}",
+      "class_code": "${globals.classCode}"
     };
 
 
-
-    DocumentReference docRef = await Firestore.instance.collection("$collection1").document("$uid").collection("$collection2").add(map);
+    DocumentReference docRef = await Firestore.instance.collection("users")
+        .document("${globals.uid}").collection("previous_lecture")
+        .add(map);
     debugPrint("The New Document created with Id : ${docRef.documentID} ");
 
 
-
+    debugPrint("added to previous lectures");
 
     Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => Lecture()
-                        ),
-                        );
-
-
-
+        builder: (context) => Lecture()
+    ),
+    );
   }
-
-
-
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
 //          leading: IconButton(
 //              icon: Icon(
 //                FontAwesomeIcons.bars,
 //                color: Colors.white,
 //              ),
 //              onPressed: () {}),
-          title: Container(
-            alignment: Alignment.center,
-            child: Text("Account Details",
-                style: TextStyle(
-                  color: Colors.white,
-                )),
-          ),
+        title: Container(
+          alignment: Alignment.center,
+          child: Text("Account Details",
+              style: TextStyle(
+                color: Colors.white,
+              )),
+        ),
 //          actions: <Widget>[
 //            IconButton(
 //              icon: Icon(
@@ -196,136 +165,129 @@ class _GenerationState extends State<Generation> {
 //              onPressed: null,
 //            ),
 //          ],
-        ),
-        body: Form(
-          key: _formKeyValue,
-          autovalidate: true,
-          child: new ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            children: <Widget>[
+      ),
+      body: Form(
+        key: _formKeyValue,
+        autovalidate: true,
+        child: new ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          children: <Widget>[
 
-              SizedBox(height: 40.0),
-              StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance.collection("class").snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData)
-                      return new Container(width: 0.0, height: 0.0);
-                    else {
-
-
-
+            SizedBox(height: 40.0),
+            StreamBuilder<QuerySnapshot>(
+                stream: Firestore.instance.collection("class").snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData)
+                    return CircularProgressIndicator();
+                  else {
 //                      if((globals.requiredStudents > globals.studentId.length) || (globals.requiredStudents == 0)){
 //                      globals.startAddingStudents = 1;}
 
 
-
-
-                      List<DropdownMenuItem> classCodes = [];
-                      for (int i = 0; i < snapshot.data.documents.length; i++) {
-                        DocumentSnapshot snap = snapshot.data.documents[i];
-                        classCodes.add(
-                          DropdownMenuItem(
-                            child: Text(
-                              snap.documentID,
-                              style: TextStyle(color: Color(0xff11b719)),
-                            ),
-                            value: "${snap.documentID}",
+                    List<DropdownMenuItem> classCodes = [];
+                    for (int i = 0; i < snapshot.data.documents.length; i++) {
+                      DocumentSnapshot snap = snapshot.data.documents[i];
+                      classCodes.add(
+                        DropdownMenuItem(
+                          child: Text(
+                            snap.documentID,
+                            style: TextStyle(color: Color(0xff11b719)),
                           ),
-                        );
-                      }
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                          value: "${snap.documentID}",
+                        ),
+                      );
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
 
 //                          Icon(FontAwesomeIcons.coins,
 //                              size: 25.0, color: Color(0xff11b719)),
-                          SizedBox(width: 50.0),
-                          DropdownButton(
+                        SizedBox(width: 50.0),
+                        DropdownButton(
 
 
-
-
-                            items: classCodes,
-                            onChanged: (classCodeValue) {
-                              globals.studentId.clear();
-                              final snackBar = SnackBar(
-                                content: Text(
-                                  'Selected Class Code is $classCodeValue',
-                                  style: TextStyle(color: Color(0xff11b719)),
-                                ),
-                              );
-                              Scaffold.of(context).showSnackBar(snackBar);
-                              setState(() {
-                                selectedClassCode = classCodeValue;
-                              });
-                            },
-                            value: selectedClassCode,
-                            isExpanded: false,
-                            hint: new Text(
-                              "Choose Class Code",
-                              style: TextStyle(color: Color(0xff11b719)),
-                            ),
+                          items: classCodes,
+                          onChanged: (classCodeValue) {
+                            globals.studentId.clear();
+                            final snackBar = SnackBar(
+                              content: Text(
+                                'Selected Class Code is $classCodeValue',
+                                style: TextStyle(color: Color(0xff11b719)),
+                              ),
+                            );
+                            Scaffold.of(context).showSnackBar(snackBar);
+                            setState(() {
+                              selectedClassCode = classCodeValue;
+                            });
+                          },
+                          value: selectedClassCode,
+                          isExpanded: false,
+                          hint: new Text(
+                            "Choose Class Code",
+                            style: TextStyle(color: Color(0xff11b719)),
                           ),
-                        ],
+                        ),
+                      ],
+                    );
+                  }
+                }),
+
+
+            SizedBox(height: 40.0),
+            StreamBuilder<QuerySnapshot>(
+                stream: Firestore.instance.collection("course").snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData)
+                    return CircularProgressIndicator();
+                  else {
+                    List<DropdownMenuItem> courseCodes = [];
+                    for (int i = 0; i < snapshot.data.documents.length; i++) {
+                      DocumentSnapshot snap = snapshot.data.documents[i];
+                      courseCodes.add(
+                        DropdownMenuItem(
+                          child: Text(
+                            snap.documentID,
+                            style: TextStyle(color: Color(0xff11b719)),
+                          ),
+                          value: "${snap.documentID}",
+                        ),
                       );
                     }
-                  }),
-
-
-              SizedBox(height: 40.0),
-              StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance.collection("course").snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData)
-                      return new Container(width: 0.0, height: 0.0);
-                    else {
-                      List<DropdownMenuItem> courseCodes = [];
-                      for (int i = 0; i < snapshot.data.documents.length; i++) {
-                        DocumentSnapshot snap = snapshot.data.documents[i];
-                        courseCodes.add(
-                          DropdownMenuItem(
-                            child: Text(
-                              snap.documentID,
-                              style: TextStyle(color: Color(0xff11b719)),
-                            ),
-                            value: "${snap.documentID}",
-                          ),
-                        );
-                      }
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
 //                          Icon(FontAwesomeIcons.coins,
 //                              size: 25.0, color: Color(0xff11b719)),
-                          SizedBox(width: 50.0),
-                          DropdownButton(
-                            items: courseCodes,
-                            onChanged: (courseCodeValue) {
-                              final snackBar = SnackBar(
-                                content: Text(
-                                  'Selected Course Code is $courseCodeValue',
-                                  style: TextStyle(color: Color(0xff11b719)),
-                                ),
-                              );
-                              Scaffold.of(context).showSnackBar(snackBar);
-                              setState(() {
-                                selectedCourseCode = courseCodeValue;
-                              });
-                            },
-                            value: selectedCourseCode,
-                            isExpanded: false,
-                            hint: new Text(
-                              "Choose Course Code",
-                              style: TextStyle(color: Color(0xff11b719)),
-                            ),
+                        SizedBox(width: 50.0),
+                        DropdownButton(
+                          items: courseCodes,
+                          onChanged: (courseCodeValue) {
+                            final snackBar = SnackBar(
+                              content: Text(
+                                'Selected Course Code is $courseCodeValue',
+                                style: TextStyle(color: Color(0xff11b719)),
+                              ),
+                            );
+                            Scaffold.of(context).showSnackBar(snackBar);
+                            setState(() {
+                              selectedCourseCode = courseCodeValue;
+                            });
+                          },
+                          value: selectedCourseCode,
+                          isExpanded: false,
+                          hint: new Text(
+                            "Choose Course Code",
+                            style: TextStyle(color: Color(0xff11b719)),
                           ),
-                        ],
-                      );
-                    }
-                  }),
-              SizedBox(
-                height: 150.0,
-              ),
+                        ),
+                      ],
+                    );
+                  }
+                }),
+            SizedBox(
+              height: 150.0,
+            ),
 //              StreamBuilder<QuerySnapshot>(
 //                  stream: Firestore.instance.collection(selectedClassCode).snapshots(),
 //                  builder: (context, snapshot) {
@@ -362,81 +324,86 @@ class _GenerationState extends State<Generation> {
 //                height: 10.0,
 //              ),
 //
-                   RaisedButton(
-                      color: Color(0xff11b719),
-                      textColor: Colors.white,
-                      child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Submit", style: TextStyle(fontSize: 24.0)),
-                            ],
-                          )),
-                      onPressed: () async {
-                        if (selectedCourseCode != null &&
-                            selectedClassCode != "Choose Class Code") {
+            RaisedButton(
+                color: Color(0xff11b719),
+                textColor: Colors.white,
+                child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text("Submit", style: TextStyle(fontSize: 24.0)),
+                      ],
+                    )),
+                onPressed: () async {
+                  if (selectedCourseCode != null &&
+                      selectedClassCode != "Choose Class Code") {
+                    final QuerySnapshot querySnapshot = await Firestore.instance
+                        .collection("$selectedClassCode").getDocuments();
+
+                    debugPrint(" length : ${querySnapshot.documents.length}");
 
 
-    final QuerySnapshot querySnapshot = await Firestore.instance.collection("$selectedClassCode").getDocuments();
+                    globals.studentId.clear();
 
-    debugPrint(" length : ${querySnapshot.documents.length}");
-
-
-
-    globals.studentId.clear();
-
-    for (int i = 0; i < querySnapshot.documents.length; i++) {
-    globals.studentId.insert(i, "${querySnapshot.documents[i].documentID}");
-    }
+                    for (int i = 0; i < querySnapshot.documents.length; i++) {
+                      globals.studentId.insert(
+                          i, "${querySnapshot.documents[i].documentID}");
+                    }
 
 
+                    globals.classCode = selectedClassCode;
+                    globals.courseCode = selectedCourseCode;
+
+                    _showDialog();
+
+//                            globals.startAddingStudents = 0;
 
 
+                  }
+                }
+            )
+          ],
+        ),
 
-
-    globals.classCode = selectedClassCode;
-                            globals.courseCode = selectedCourseCode;
-                            getClassDetails();
-                            getCourseDetails();
-                            globals.startAddingStudents = 0;
-
-                            if (globals.studentId.length ==
-                                globals.requiredStudents) {
-                              _showDialog();
-                            }
-                            else {
-                              debugPrint("Having problem");
-                            }
-                          }
-                        }
-                      ) ],
-              ),
-
-          ),
-        );
+      ),
+    );
   }
+
+
+  getClassDetails() async {
+    debugPrint("Inside getClass func");
+
+    DocumentSnapshot snapshot = await Firestore.instance.collection('class')
+        .document('${globals.classCode}')
+        .get();
+    if (snapshot.data == null) {
+      debugPrint("No data in class > classcode");
+    }
+    else {
+      globals.branch = snapshot.data['branch'];
+      debugPrint("See if the value of branch is set  1 : ${globals.branch}");
+      globals.faculty = snapshot.data['faculty'];
+      globals.programme = snapshot.data['programme'];
+      globals.sec = snapshot.data['sec'];
+      getCourseDetails();
+    }
+  }
+
+  getCourseDetails() async {
+    debugPrint("Inside getCourse func");
+
+    DocumentSnapshot snapshot = await Firestore.instance.collection('course')
+        .document('${globals.courseCode}')
+        .get();
+    if (snapshot.data == null) {
+      debugPrint("No data in course > coursecode");
+    }
+    else {
+      globals.courseName = snapshot.data['name'];
+      globals.courseYear = snapshot.data['year'];
+      createQrDocument();
+    }
+  }
+
 }
-
-getClassDetails() async {
-  debugPrint("Inside getClass func");
-
-  DocumentSnapshot snapshot= await Firestore.instance.collection('class').document('${globals.classCode}').get();
-  if (snapshot.data == null) {debugPrint("No data in class > classcode");}
-  else{
-  globals.branch = snapshot.data['branch'];
-  debugPrint("See if the value of branch is set : ${globals.branch}");
-  globals.faculty = snapshot.data['faculty'];
-  globals.programme = snapshot.data['programme'];
-  globals.sec = snapshot.data['sec'];
-}}
-
-getCourseDetails() async {
-  debugPrint("Inside getCourse func");
-
-  DocumentSnapshot snapshot= await Firestore.instance.collection('course').document('${globals.courseCode}').get();
-  if (snapshot.data == null) {debugPrint("No data in course > coursecode");}
-  else{
-    globals.courseName = snapshot.data['name'];
-    globals.courseYear = snapshot.data['year'];
-  }}

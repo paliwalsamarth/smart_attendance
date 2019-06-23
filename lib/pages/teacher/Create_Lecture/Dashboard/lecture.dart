@@ -106,6 +106,8 @@ class LectureState extends State<Lecture> {
 //
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
+                Navigator.pop(context);
+
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => Teacher()),
                 );

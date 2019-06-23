@@ -34,7 +34,7 @@ class AttendanceState extends State<Attendance>{
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection('attendance').document("${globals.attendance_id}").collection("attendance").snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
+        if (!snapshot.hasData) return CircularProgressIndicator();
 
         return _buildList(context, snapshot.data.documents);
       },

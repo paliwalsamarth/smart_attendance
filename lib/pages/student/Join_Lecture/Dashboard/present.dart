@@ -44,7 +44,7 @@ class PresentState extends State<Present>{
           isEqualTo: "$id")  // here instead of Search field should be our id , which we should get after login
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
+        if (!snapshot.hasData) return CircularProgressIndicator();
 
         return _buildList(context, snapshot.data.documents);
       },

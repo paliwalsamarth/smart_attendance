@@ -33,9 +33,6 @@ class _ScanState extends State<ScanScreen> {
               child: new Text("Ok"),
               onPressed: () {
                 Navigator.of(context).pop();
-
-
-
               },
             ),
           ],
@@ -59,9 +56,6 @@ class _ScanState extends State<ScanScreen> {
               child: new Text("Ok"),
               onPressed: () {
                 Navigator.of(context).pop();
-
-
-
               },
             ),
           ],
@@ -75,43 +69,31 @@ class _ScanState extends State<ScanScreen> {
     super.initState();
   }
 
-  Future syncToPreviousAttendance() async{
-
-
+  Future syncToPreviousAttendance() async {
     String collection1 = "users";
     String collection2 = "previous_attendance";
     String courseCode = globals.courseCode;
     String uid = globals.uid;
 
 
-
-
-
-
-
     var fireStore2 = Firestore.instance;
 
 
-
-      Map<String, String> map ={ "time_stamp" : "${new DateTime.now()}",
-        "course_code" : "$courseCode"
-
-      };
+    Map<String, String> map = { "time_stamp": "${new DateTime.now()}",
+      "course_code": "$courseCode"
+    };
 
 
-
-      DocumentReference docRef = await fireStore2.collection("$collection1").document("$uid").collection("$collection2").add(map);
-      debugPrint("The New Document created with Id : ${docRef.documentID} ");
-
+    DocumentReference docRef = await fireStore2.collection("$collection1")
+        .document("$uid").collection("$collection2")
+        .add(map);
+    debugPrint("The New Document created with Id : ${docRef.documentID} ");
 
 
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => Lecture()
     ),
     );
-
-
-
   }
 
   @override
@@ -139,8 +121,6 @@ class _ScanState extends State<ScanScreen> {
               ,
 
 
-
-
             ],
           ),
         ));
@@ -150,50 +130,39 @@ class _ScanState extends State<ScanScreen> {
     try {
       String barcode = await BarcodeScanner.scan();
       setState(() => this.barcode = barcode);
+//      String barcode = "-Li2ZkLdyHEK8ODe0xJM";
 
-      String decrypt_data = xxtea.decryptToString(barcode,globals.key);
+      String decrypt_data = xxtea.decryptToString(barcode, globals.key);
       debugPrint(decrypt_data);
 
 
-
-        debugPrint("Decripting qr code");
-
+      debugPrint("Decripting qr code");
 
 
       try {
-
-        DocumentSnapshot snapshot= await Firestore.instance.collection("class").document("${globals.clas}").collection("lectureID_qrCode").document("$decrypt_data").get();
-        if (snapshot.data['class_code'] == "${globals.clas}")
-        {
+        DocumentSnapshot snapshot = await Firestore.instance.collection("class")
+            .document("${globals.clas}").collection("lectureID_qrCode")
+            .document("$decrypt_data")
+            .get();
+        if (snapshot.data['class_code'] == "${globals.clas}") {
           globals.courseCode = snapshot.data['course_code'];
           globals.currentCollection = snapshot.data['collection_name'];
           globals.attendance_id = snapshot.data['attendance_id'];
           getCourseDetails();
-          getLecturerDetails();
-          giveAttendance();
+
 
 //          syncToPreviousAttendance();
         }
-        else
-        {debugPrint("Comparing global = ${globals.clas} : snapshot = ${snapshot.data['class_code']}");
-        _showDialogWrong();
-
+        else {
+          debugPrint("Comparing global = ${globals.clas} : snapshot = ${snapshot
+              .data['class_code']}");
+          _showDialogWrong();
         }
-
-
-
       } catch (e) {
         print(e.message);
 
         _showDialogWrong();
       }
-
-
-
-
-
-
-
 
 
 //      present.updating(barcode);
@@ -206,74 +175,94 @@ class _ScanState extends State<ScanScreen> {
       } else {
         setState(() => this.barcode = 'Unknown error: $e');
       }
-    } on FormatException{
-      setState(() => this.barcode = 'null (User returned using the "back"-button before scanning anything. Result)');
+    } on FormatException {
+      setState(() => this.barcode =
+      'null (User returned using the "back"-button before scanning anything. Result)');
     } catch (e) {
       setState(() => this.barcode = 'Unknown error: $e');
     }
   }
 
 
+  getLecturerDetails() async {
+    debugPrint("Inside getClass func");
 
-
-getLecturerDetails() async {
-  debugPrint("Inside getClass func");
-
-  DocumentSnapshot snapshot= await Firestore.instance.collection('attendance').document('${globals.attendance_id}').get();
-  if (snapshot.data == null) {debugPrint("No data in class > classcode");}
-  else{
-    globals.lecturerName = snapshot.data['name'];
-    globals.post = snapshot.data['post'];
-  }}
-
-getCourseDetails() async {
-  debugPrint("Inside getCourse func");
-
-  DocumentSnapshot snapshot= await Firestore.instance.collection('course').document('${globals.courseCode}').get();
-  if (snapshot.data == null) {debugPrint("No data in course > coursecode");}
-  else{
-    globals.courseName = snapshot.data['name'];
-    globals.courseYear = snapshot.data['year'];
-  }}
-
-  giveAttendance() async{
-  try{
-String attendanceId = globals.attendance_id;
-
-     await Firestore.instance
-        .collection("attendance")
-        .document("$attendanceId")
-        .collection("attendance")
-        .where('id',
-        isEqualTo: "${globals.id}").getDocuments().then((string){ string.documents.forEach((doc) async => docId  = doc.data.toString());}  );
-
-
-     List docId1 = docId.split(",");
-     String docId2 = docId1[0];
-     List docId3 = docId2.split("-");
-     globals.docId = "-${docId3[1]}";
-     debugPrint(" ${globals.docId}");
-
-
-
-await Firestore.instance
-    .collection("attendance")
-    .document("$attendanceId")
-    .collection("attendance")
-    .document("${globals.docId}")
-    .updateData({"attendance" : "Present"});
-
-
-
-
-
-await syncToPreviousAttendance();
+    DocumentSnapshot snapshot = await Firestore.instance.collection(
+        'attendance').document('${globals.attendance_id}').get();
+    if (snapshot.data == null) {
+      debugPrint("No data in class > classcode");
+    }
+    else {
+      globals.lecturerName = snapshot.data['name'];
+      globals.post = snapshot.data['post'];
+      findAttendanceId();
+    }
   }
-catch(e){
-  print('Caught Firestore exception1');
-  print(e);
-  _showDialogTryAgain();
+
+  getCourseDetails() async {
+    debugPrint("Inside getCourse func");
+
+    DocumentSnapshot snapshot = await Firestore.instance.collection('course')
+        .document('${globals.courseCode}')
+        .get();
+    if (snapshot.data == null) {
+      debugPrint("No data in course > coursecode");
+    }
+    else {
+      globals.courseName = snapshot.data['name'];
+      globals.courseYear = snapshot.data['year'];
+      getLecturerDetails();
+    }
+  }
+
+  findAttendanceId() async {
+    try {
+
+
+      await Firestore.instance
+          .collection("attendance")
+          .document("${globals.attendance_id}")
+          .collection("attendance")
+          .where('id',
+          isEqualTo: "${globals.id}").getDocuments().then((string) {
+        string.documents.forEach((doc) async => globals.docId = doc.documentID);
+      });
+
+//      debugPrint(" $docId");
+//      List docId1 = docId.split(",");
+//      debugPrint(" $docId1");
+//      String docId2 = docId1[0];
+//      debugPrint(" $docId2");
+//      List docId3 = docId2.split("-");
+//      debugPrint(" $docId3");
+//      globals.docId = "-${docId3[1]}";
+      debugPrint(" ${globals.docId}");
+
+      markPresent();
+    }
+    catch (e) {
+      print('Caught Firestore exception2');
+      print(e);
+      _showDialogTryAgain();
+    }
+  }
+
+  markPresent() async {
+    try {
+      await Firestore.instance
+          .collection("attendance")
+          .document("${globals.attendance_id}")
+          .collection("attendance")
+          .document("${globals.docId}")
+          .updateData({"attendance": "Present"});
+
+
+      await syncToPreviousAttendance();
+    }
+    catch (e) {
+      print('Caught Firestore exception3');
+      print(e);
+      _showDialogTryAgain();
+    }
+  }
 }
-
-
-}}

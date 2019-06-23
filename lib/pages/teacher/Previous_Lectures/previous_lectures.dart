@@ -37,7 +37,7 @@ class PreviousLecturesState extends State<PreviousLectures>{
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection('$collection1').document('$uid').collection('$collection2').snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
+        if (!snapshot.hasData) return CircularProgressIndicator();
 
         return _buildList(context, snapshot.data.documents);
       },
