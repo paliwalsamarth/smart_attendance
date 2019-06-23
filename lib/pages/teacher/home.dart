@@ -75,7 +75,7 @@ class _TeacherState extends State<Teacher> {
               title: new FlatButton(
                   onPressed: () {
 //                                globals.studentId.clear();
-                    checking(context);
+                    checkingPastStudentData(context);
                   },
                   textColor: Colors.white70,
                   color: Colors.redAccent,
@@ -111,12 +111,8 @@ class _TeacherState extends State<Teacher> {
   }
 }
 
-checking(BuildContext context) async {
+checkingPastStudentData(BuildContext context) async {
 
-
-
-//  debugPrint(" length : ${globals.attendance_id}");
-//  Firestore app = Firestore.instance;
   final QuerySnapshot querySnapshot = await Firestore.instance.collection("attendance").document(globals.attendance_id).collection("attendance").getDocuments();
 
   debugPrint(" length : ${querySnapshot.documents.length}");
@@ -128,34 +124,9 @@ checking(BuildContext context) async {
          for (int i = 0; i < querySnapshot.documents.length; i++) {
            globals.extraStudentDocumentId.insert(i, "${querySnapshot.documents[i].documentID}");
           }
+      debugPrint("${globals.extraStudentDocumentId[0]}");
 
-
-//    List<DocumentSnapshot> list = querySnapshot.documents;
-//  debugPrint(" length : ${globals.extraStudentDocumentId.length}");
-
-
-
-    debugPrint("${globals.extraStudentDocumentId[0]}");
-
-//                          await Firestore.instance.collection("attendance").document("${globals.attendance_id}").collection("attendance")
-//                              .getDocuments()
-//                              .then((snapshot) {
-//                            List<DocumentSnapshot> list = snapshot.documents;
     debugPrint(" length : ${globals.extraStudentDocumentId.length}");
-
-//        for (DocumentSnapshot ds in snapshot.documents){
-//          ds.reference.delete();
-//        }
-
-//                            if (globals.extraStudentDocumentId.length > 1) {
-//                              debugPrint("${list[1].documentID}");
-//
-//                          for (DocumentSnapshot ds in snapshot.documents){
-////                            if (ds.documentID! = "-Lhnb1111default")
-////                            {
-//                              ds.reference.delete();
-////                              }
-//                          }
 
     for (int i = 1; i < globals.extraStudentDocumentId.length; i++) {
       debugPrint(" deleting ${globals.extraStudentDocumentId[i]}");
@@ -178,3 +149,5 @@ checking(BuildContext context) async {
 
 
 }
+
+

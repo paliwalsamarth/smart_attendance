@@ -60,6 +60,40 @@ class _GenerationState extends State<Generation> {
   }
 
 
+  checkingPastQrData() async {
+    List extraQrDocId = [];
+    final QuerySnapshot querySnapshot = await Firestore.instance.collection("class").document(globals.classCode).collection("lectureID_qrCode").getDocuments();
+
+    debugPrint(" length : ${querySnapshot.documents.length}");
+
+
+    if (querySnapshot.documents.length > 1) {
+
+
+      for (int i = 0; i < querySnapshot.documents.length; i++) {
+        extraQrDocId.insert(i, "${querySnapshot.documents[i].documentID}");
+      }
+      debugPrint("${extraQrDocId[0]}");
+
+      debugPrint(" length : ${extraQrDocId.length}");
+
+      for (int i = 1; i < extraQrDocId.length; i++) {
+        debugPrint(" deleting ${extraQrDocId[i]}");
+        Firestore.instance.collection("class").document("${globals.classCode}").collection("lectureID_qrCode").document(extraQrDocId[i]).delete();
+      }
+     createQrDocument();
+    }
+    else{
+     createQrDocument();
+    }
+  }
+
+
+
+
+
+
+
   Future createQrDocument() async {
     debugPrint("i am here");
 
@@ -402,7 +436,7 @@ class _GenerationState extends State<Generation> {
     else {
       globals.courseName = snapshot.data['name'];
       globals.courseYear = snapshot.data['year'];
-      createQrDocument();
+      checkingPastQrData();
     }
   }
 
