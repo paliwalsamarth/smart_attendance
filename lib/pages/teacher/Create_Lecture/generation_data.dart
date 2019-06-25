@@ -9,7 +9,8 @@ import 'package:xxtea/xxtea.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:async/async.dart';
-
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:smart_attendance/pages/teacher/home.dart';
 
 
 
@@ -24,7 +25,34 @@ class _GenerationState extends State<Generation> {
 //  = "Choose Class Code" ;
   String selectedCourseCode;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+@override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+
+
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    print("BACK BUTTON!"); // Do some stuff.
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Teacher()),
+    );
+    return true;
+  }
 
   void _showDialog() {
     // flutter defined function
@@ -48,6 +76,15 @@ class _GenerationState extends State<Generation> {
 
               child: new Text("Yes"),
               onPressed: () async {
+                _scaffoldKey.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 20), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Loading...")
+                      ],
+                    ),
+                    ));
                 Navigator.of(context).pop();
                 getClassDetails();
               },
@@ -165,16 +202,20 @@ class _GenerationState extends State<Generation> {
 
     debugPrint("added to previous lectures");
 
+Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => Lecture()
     ),
+
     );
+   // Navigator.pop(context);  here it should be ofcontext of the showdialog
   }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
 //          leading: IconButton(
 //              icon: Icon(
@@ -245,6 +286,7 @@ class _GenerationState extends State<Generation> {
                           onChanged: (classCodeValue) {
                             globals.studentId.clear();
                             final snackBar = SnackBar(
+                              duration: new Duration(seconds: 1),
                               content: Text(
                                 'Selected Class Code is $classCodeValue',
                                 style: TextStyle(color: Color(0xff11b719)),
@@ -298,6 +340,7 @@ class _GenerationState extends State<Generation> {
                           items: courseCodes,
                           onChanged: (courseCodeValue) {
                             final snackBar = SnackBar(
+                              duration: new Duration(seconds: 1),
                               content: Text(
                                 'Selected Course Code is $courseCodeValue',
                                 style: TextStyle(color: Color(0xff11b719)),
@@ -372,6 +415,9 @@ class _GenerationState extends State<Generation> {
                 onPressed: () async {
                   if (selectedCourseCode != null &&
                       selectedClassCode != "Choose Class Code") {
+
+
+
                     final QuerySnapshot querySnapshot = await Firestore.instance
                         .collection("$selectedClassCode").getDocuments();
 

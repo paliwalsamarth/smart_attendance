@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:smart_attendance/pages/student/home.dart';
 import 'package:smart_attendance/pages/teacher//home.dart';
-
+import 'package:smart_attendance/pages/welcome.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -14,17 +14,44 @@ import 'package:smart_attendance/components/Buttons/textButton.dart';
 import 'package:smart_attendance/components/Buttons/roundedButton.dart';
 import 'package:smart_attendance/services/validations.dart';
 import 'package:smart_attendance/globals.dart' as globals;
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => new _LoginState();
 }
 
+
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _email, _password;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
 
+
+
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    print("BACK BUTTON!"); // Do some stuff.
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WelcomePage()),
+    );
+    return true;
+  }
 //  void showInSnackBar(String value) {
 //    _scaffoldKey.currentState
 //        .showSnackBar(new SnackBar(content: new Text(value)));
@@ -50,6 +77,7 @@ class _LoginState extends State<Login> {
         globals.post = snapshot.data['post'];
         globals.role = snapshot.data['role'];
         globals.attendance_id = snapshot.data['attendance_id'];
+        Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Teacher()),
@@ -62,6 +90,7 @@ class _LoginState extends State<Login> {
         debugPrint("Reached getStud func");
         getStud();
         debugPrint("Passes getStud func");
+        Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Student()),
@@ -94,6 +123,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(),
       body: Form(
           key: _formKey,
@@ -153,15 +183,37 @@ class _LoginState extends State<Login> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       try {
+
+
+
         FirebaseUser user = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _email, password: _password);
+
+        _scaffoldKey.currentState.showSnackBar(
+            new SnackBar(duration: new Duration(seconds: 20), content:
+            new Row(
+              children: <Widget>[
+                new CircularProgressIndicator(),
+                new Text("  Loging-In...")
+              ],
+            ),
+            ));
         globals.uid = user.uid;
         debugPrint("printing uid   ${globals.uid}");
         checkRole();
         debugPrint("Role checking done");
       } catch (e) {
+        _scaffoldKey.currentState.showSnackBar(
+            new SnackBar(duration: new Duration(seconds: 4), content:
+            new Row(
+              children: <Widget>[
+
+                new Text("Invalid email id or password entered"),
+              ],
+            ),
+            ));
         print(e.message);
-        debugPrint("Error in role checking");
+
 //        showInSnackBar(e.message.toString());
       }
     }

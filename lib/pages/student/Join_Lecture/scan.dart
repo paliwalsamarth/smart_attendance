@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 import 'package:xxtea/xxtea.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:smart_attendance/pages/student/home.dart';
 
 
 String docId;
@@ -17,6 +19,33 @@ class ScanScreen extends StatefulWidget {
 
 class _ScanState extends State<ScanScreen> {
   String barcode = "";
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+
+
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    print("BACK BUTTON!"); // Do some stuff.
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Student()),
+    );
+    return true;
+  }
 
   void _showDialogWrong() {
     // flutter defined function
@@ -64,10 +93,10 @@ class _ScanState extends State<ScanScreen> {
     );
   }
 
-  @override
-  initState() {
-    super.initState();
-  }
+//  @override
+//  initState() {
+//    super.initState();
+//  }
 
   Future syncToPreviousAttendance() async {
     String collection1 = "users";
@@ -96,9 +125,12 @@ class _ScanState extends State<ScanScreen> {
     );
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: new AppBar(
           title: new Text('Please Scan the QR CODE'),
         ),
@@ -129,6 +161,7 @@ class _ScanState extends State<ScanScreen> {
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
+
       setState(() => this.barcode = barcode);
 //      String barcode = "-Li2ZkLdyHEK8ODe0xJM";
 
@@ -145,6 +178,17 @@ class _ScanState extends State<ScanScreen> {
             .document("$decrypt_data")
             .get();
         if (snapshot.data['class_code'] == "${globals.clas}") {
+
+          _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(duration: new Duration(seconds: 20), content:
+              new Row(
+                children: <Widget>[
+                  new CircularProgressIndicator(),
+                  new Text("  Signing-In...")
+                ],
+              ),
+              ));
+
           globals.courseCode = snapshot.data['course_code'];
           globals.currentCollection = snapshot.data['collection_name'];
           globals.attendance_id = snapshot.data['attendance_id'];

@@ -28,11 +28,11 @@ class LectureState extends State<Lecture> {
 
   bool myInterceptor(bool stopDefaultButtonEvent) {
     print("BACK BUTTON!"); // Do some stuff.
-    _showDialog();
+    _showDialog(context);
     return true;
   }
 
-  void _showDialog() {
+  void _showDialog(BuildContext pageContext) {
     // flutter defined function
     showDialog(
       context: context,
@@ -47,9 +47,11 @@ class LectureState extends State<Lecture> {
               child: new Text("Yes"),
               onPressed: () {
                 Navigator.of(context).pop();
+Navigator.pop(pageContext);
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => Student()),
                 );
+              
 
 
               },

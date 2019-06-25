@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_attendance/globals.dart' as globals;
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:smart_attendance/pages/student/home.dart';
+
+
 
 class PreviousAttendance extends StatefulWidget {
 
@@ -21,6 +25,34 @@ class PreviousAttendanceState extends State<PreviousAttendance>{
   String collection1 = "users";
   String collection2 = "previous_attendance";
   String uid = globals.uid;
+
+@override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+
+
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    print("BACK BUTTON!"); // Do some stuff.
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Student()),
+    );
+    return true;
+  }
+
 
 
   @override

@@ -4,7 +4,7 @@ import 'package:smart_attendance/pages/teacher/Create_Lecture/dashboard/info.dar
 import 'package:smart_attendance/pages/teacher/Create_Lecture/dashboard/attendance.dart';
 import 'package:smart_attendance/pages/teacher/Create_Lecture/dashboard/generate.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:smart_attendance/pages//teacher/home.dart';
+import 'package:smart_attendance/pages/teacher/home.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 
 import 'package:smart_attendance/pages/teacher/Create_Lecture/dashboard/save_attendance.dart';
@@ -22,6 +22,7 @@ class Lecture extends StatefulWidget {
   }
 }
 class LectureState extends State<Lecture> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -42,11 +43,11 @@ class LectureState extends State<Lecture> {
 
   bool myInterceptor(bool stopDefaultButtonEvent) {
     print("BACK BUTTON!"); // Do some stuff.
-    _showDialog();
+    _showDialog(context);
     return true;
   }
 
-  void _showDialog() {
+  void _showDialog(BuildContext pageContext) {
     // flutter defined function
     showDialog(
       context: context,
@@ -75,6 +76,16 @@ class LectureState extends State<Lecture> {
 
               child: new Text("Yes"),
               onPressed: () async {
+
+                _scaffoldKey.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 20), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-In...")
+                      ],
+                    ),
+                    ));
 
                 Firestore.instance.collection("class").document("${globals.classCode}").collection("lectureID_qrCode").document("${globals.qrId}").delete();
 
@@ -105,8 +116,8 @@ class LectureState extends State<Lecture> {
 //
 //
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                Navigator.pop(context);
+//                Navigator.of(context).pop();
+                Navigator.pop(pageContext);
 
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => Teacher()),
@@ -144,12 +155,14 @@ class LectureState extends State<Lecture> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       theme: ThemeData(
           primarySwatch: Colors.grey,
           primaryTextTheme: TextTheme(
             title: TextStyle(color: Colors.white),
           )),
       home: Scaffold(
+        key: _scaffoldKey,
         appBar : AppBar(
             title: Text("Click Icon to stop attendance"),
             backgroundColor: Colors.red,
@@ -159,7 +172,7 @@ class LectureState extends State<Lecture> {
 
         icon: Icon(Icons.close),
         onPressed: () {
-          _showDialog();
+          _showDialog(context);
         },
       ),]),
         body: _pageOptions[_selectedTab],
