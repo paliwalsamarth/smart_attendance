@@ -186,7 +186,7 @@ class _ScanState extends State<ScanScreen> {
               new Row(
                 children: <Widget>[
                   new CircularProgressIndicator(),
-                  new Text("  Signing-In...")
+                  new Text("  Joining the Lecture..")
                 ],
               ),
               ));
@@ -232,7 +232,7 @@ class _ScanState extends State<ScanScreen> {
               new SnackBar(duration: new Duration(seconds: 4), content:
               new Row(
                 children: <Widget>[
-                  new Text("Unknown error: $e")
+                  new Container( child: new Text("Unknown error: $e"),)
                 ],
               ),
               ));
@@ -258,7 +258,7 @@ class _ScanState extends State<ScanScreen> {
             new SnackBar(duration: new Duration(seconds: 4), content:
             new Row(
               children: <Widget>[
-                new Text("Unknown error: $e")
+                new Container( child: new Text("Unknown error: $e"),)
               ],
             ),
             ));

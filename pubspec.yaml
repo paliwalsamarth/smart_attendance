@@ -10,21 +10,20 @@ dev_dependencies:
     sdk: flutter
   cloud_firestore: ^0.12.5+1
   image_picker: ^0.6.0+9                                             # new
-  google_sign_in: ^4.0.2                                           # new
-  firebase_analytics: ^3.0.2                                      # new
+#  google_sign_in: ^4.0.2                                           # new
+#  firebase_analytics: ^3.0.2                                      # new
   firebase_auth: ^0.11.1+6                                            # new
   firebase_database: ^3.0.2                                       # new
-  firebase_storage: ^3.0.1
+#  firebase_storage: ^3.0.1
   firebase_core: ^0.4.0+5                                       # new
   path_provider: ^1.1.0
   barcode_scan: ^1.0.0
   qr_flutter: ^2.1.0+55
   sqflite: ^1.1.5
   xxtea: ^2.0.2
-  shared_preferences: ^0.5.3+1
   back_button_interceptor: ^4.0.6
-  flutter_blue: ^0.5.0
-  flutter_bluetooth_serial: ^0.0.5
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

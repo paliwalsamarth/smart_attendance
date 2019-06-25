@@ -17,6 +17,7 @@ import 'package:smart_attendance/components/Buttons/roundedButton.dart';
 import 'package:smart_attendance/services/validations.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:smart_attendance/database_helper.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -61,6 +62,16 @@ class _LoginState extends State<Login> {
 
   bool autovalidate = false;
   Validations validations = new Validations();
+
+//  void _insert() async {
+//    // row to insert
+//    Map<String, dynamic> row = {
+//      DatabaseHelper.columnName : 'Bob',
+//      DatabaseHelper.columnAge  : 23
+//    };
+//    final id = await dbHelper.insert(row);
+//    print('inserted row id: $id');
+//  }
 
   checkRole() async {
     debugPrint("Inside getStud func");
