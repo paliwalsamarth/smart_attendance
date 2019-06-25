@@ -69,7 +69,12 @@ class _TeacherState extends State<Teacher> {
 
   bool myInterceptor(bool stopDefaultButtonEvent) {
     print("BACK BUTTON!"); // Do some stuff.
-    _showDialog(context);
+//    _showDialog(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomePage()),
+    );
     return true;
   }
 

@@ -85,6 +85,14 @@ class _ScanState extends State<ScanScreen> {
             new FlatButton(
               child: new Text("Ok"),
               onPressed: () {
+                _scaffoldKey.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new Text("Try Again!")
+                      ],
+                    ),
+                    ));
                 Navigator.of(context).pop();
               },
             ),
@@ -119,7 +127,7 @@ class _ScanState extends State<ScanScreen> {
         .add(map);
     debugPrint("The New Document created with Id : ${docRef.documentID} ");
 
-
+    Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => Lecture()
     ),
