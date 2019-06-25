@@ -165,6 +165,7 @@ class LectureState extends State<Lecture> {
         key: _scaffoldKey,
         appBar : AppBar(
             title: Text("Click Icon to stop attendance"),
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.red,
             actions: <Widget>[
         // action button

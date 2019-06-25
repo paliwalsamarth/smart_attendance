@@ -63,7 +63,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
 
     return new Scaffold(
-      appBar: new AppBar(),
+      appBar: AppBar(title: Text('Attended Lectures'),
+        automaticallyImplyLeading: false,),
       body: ListView(
         children: <Widget>[
           Card(

@@ -28,7 +28,8 @@ class PresentState extends State<Present>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text('Live attendance')),
+      appBar: AppBar(title: Text('Live attendance'),
+        automaticallyImplyLeading: false,),
       body: _buildBody(context),
     );
   }

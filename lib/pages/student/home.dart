@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import "package:flutter/material.dart";
 //import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -32,14 +34,11 @@ class _StudentState extends State<Student> {
   }
 
 
-
-
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
-
 
 
   bool myInterceptor(bool stopDefaultButtonEvent) {
@@ -65,21 +64,14 @@ class _StudentState extends State<Student> {
             new FlatButton(
 
               child: new Text("No"),
-              onPressed: ()  {
-
-
+              onPressed: () {
                 Navigator.of(context).pop();
-
-
-
-
               },
             ),
             new FlatButton(
 
               child: new Text("Yes"),
               onPressed: () async {
-
                 _scaffoldKey.currentState.showSnackBar(
                     new SnackBar(duration: new Duration(seconds: 20), content:
                     new Row(
@@ -99,7 +91,7 @@ class _StudentState extends State<Student> {
                 globals.qrId = null;
                 globals.attendance_id = null;
                 globals.courseName = null;
-                globals.courseYear= null;
+                globals.courseYear = null;
 
                 globals.studentId.clear();
                 globals.studentDocumentId.clear();
@@ -111,16 +103,16 @@ class _StudentState extends State<Student> {
                 globals.id = null;
                 globals.currentCollection = null;
                 globals.key = "1234567890";
-                globals.clas= null;
+                globals.clas = null;
                 globals.branch = null;
-                globals.faculty= null;
-                globals.programme= null;
-                globals.sec=null;
-                globals.uid=null;
-                globals.name=null;
-                globals.role=null;
-                globals.lecturerName=null;
-                globals.docId=null;
+                globals.faculty = null;
+                globals.programme = null;
+                globals.sec = null;
+                globals.uid = null;
+                globals.name = null;
+                globals.role = null;
+                globals.lecturerName = null;
+                globals.docId = null;
 
                 Navigator.of(context).pop();
                 Navigator.pop(pageContext);
@@ -130,9 +122,6 @@ class _StudentState extends State<Student> {
                 );
               },
             ),
-
-
-
 
 
           ],
@@ -148,19 +137,45 @@ class _StudentState extends State<Student> {
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(
+      appBar:
+        new AppBar(
         title: new Text('Student Dashboard'),
+    automaticallyImplyLeading: false,
       ),
+
       body: new ListView(
         children: <Widget>[
           new ListTile(
             title: new FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ScanScreen()),
-                  );
+                onPressed: () async {
+
+
+    try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ScanScreen()),
+      );
+    }
+    } on SocketException catch (_) {
+    debugPrint('not connected');
+
+    _scaffoldKey.currentState.showSnackBar(
+    new SnackBar(duration: new Duration(seconds: 4), content:
+    new Row(
+    children: <Widget>[
+    new Text("Please check your internet connection!")
+    ],
+    ),
+    ));
+    }
+
+
+
+
+
                 },
                 textColor: Colors.white70,
                 color: Colors.redAccent,
@@ -168,14 +183,41 @@ class _StudentState extends State<Student> {
           ),
           new ListTile(
             title: new FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PreviousAttendance()),
-                  );
-                },
+                onPressed: () async {
+
+
+
+    try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PreviousAttendance()),
+      );
+
+    }
+    } on SocketException catch (_) {
+    debugPrint('not connected');
+
+    _scaffoldKey.currentState.showSnackBar(
+    new SnackBar(duration: new Duration(seconds: 4), content:
+    new Row(
+    children: <Widget>[
+    new Text("Please check your internet connection!")
+    ],
+    ),
+    ));
+    }
+
+
+
+
+
+
+
+    },
                 textColor: Colors.white70,
                 color: Colors.redAccent,
                 child: new Text('Previous Attendance')),
@@ -188,13 +230,32 @@ class _StudentState extends State<Student> {
 //                            );
 //                          },
 
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()),
-                  );
-                },
+                onPressed: () async {
+    try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+
+
+    }
+    } on SocketException catch (_) {
+    debugPrint('not connected');
+
+    _scaffoldKey.currentState.showSnackBar(
+    new SnackBar(duration: new Duration(seconds: 4), content:
+    new Row(
+    children: <Widget>[
+    new Text("Please check your internet connection!")
+    ],
+    ),
+    ));
+    }
+
+    },
                 textColor: Colors.white70,
                 color: Colors.redAccent,
                 child: new Text('Profile')),
@@ -203,4 +264,6 @@ class _StudentState extends State<Student> {
       ),
     );
   }
+
+
 }

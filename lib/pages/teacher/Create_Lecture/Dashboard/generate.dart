@@ -31,6 +31,7 @@ class GenerateScreenState extends State<GenerateScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lecture Started'),
+        automaticallyImplyLeading: false,
       ),
       body: _contentWidget(),
     );

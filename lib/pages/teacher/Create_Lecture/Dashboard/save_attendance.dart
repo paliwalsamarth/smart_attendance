@@ -69,6 +69,7 @@ class _SaveAttendanceState extends State<SaveAttendance> {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Download Attendance'),
+          automaticallyImplyLeading: false,
         ),
         body:  new Center(
 

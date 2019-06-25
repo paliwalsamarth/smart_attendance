@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smart_attendance/pages/student/Join_Lecture/Dashboard/lecture.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -133,6 +134,7 @@ class _ScanState extends State<ScanScreen> {
         key: _scaffoldKey,
         appBar: new AppBar(
           title: new Text('Please Scan the QR CODE'),
+          automaticallyImplyLeading: false,
         ),
         body: new Center(
           child: new ListView(
@@ -146,7 +148,7 @@ class _ScanState extends State<ScanScreen> {
                     color: Colors.blue,
                     textColor: Colors.white,
                     splashColor: Colors.blueGrey,
-                    onPressed: scan,
+                    onPressed: checkNet,
                     child: const Text('Click here to scan QR code')
                 ),
               )
@@ -214,16 +216,54 @@ class _ScanState extends State<ScanScreen> {
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          this.barcode = 'The user did not grant the camera permission!';
+          _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(duration: new Duration(seconds: 4), content:
+              new Row(
+                children: <Widget>[
+                  new Text("grant the camera permission!")
+                ],
+              ),
+              ));
+
         });
       } else {
-        setState(() => this.barcode = 'Unknown error: $e');
+        setState(() {
+          _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(duration: new Duration(seconds: 4), content:
+              new Row(
+                children: <Widget>[
+                  new Text("Unknown error: $e")
+                ],
+              ),
+              ));
+
+        });
+
       }
     } on FormatException {
-      setState(() => this.barcode =
-      'null (User returned using the "back"-button before scanning anything. Result)');
+      setState(() {
+        _scaffoldKey.currentState.showSnackBar(
+            new SnackBar(duration: new Duration(seconds: 4), content:
+            new Row(
+              children: <Widget>[
+                new Text("Scanning not done correctly")
+              ],
+            ),
+            ));
+
+      });
     } catch (e) {
-      setState(() => this.barcode = 'Unknown error: $e');
+      setState(() {
+        _scaffoldKey.currentState.showSnackBar(
+            new SnackBar(duration: new Duration(seconds: 4), content:
+            new Row(
+              children: <Widget>[
+                new Text("Unknown error: $e")
+              ],
+            ),
+            ));
+
+      });
     }
   }
 
@@ -308,5 +348,28 @@ class _ScanState extends State<ScanScreen> {
       print(e);
       _showDialogTryAgain();
     }
+  }
+
+
+  Future checkNet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        scan();
+      }
+    } on SocketException catch (_) {
+      debugPrint('not connected');
+
+      _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(duration: new Duration(seconds: 4), content:
+          new Row(
+            children: <Widget>[
+              new Text("Please check your internet connection!")
+            ],
+          ),
+          ));
+    }
+
+
   }
 }

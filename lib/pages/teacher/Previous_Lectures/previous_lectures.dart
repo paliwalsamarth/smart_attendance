@@ -58,8 +58,10 @@ class PreviousLecturesState extends State<PreviousLectures>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text('Lectures Taken')),
+      appBar: AppBar(title: Text('Lectures Taken'),
+        automaticallyImplyLeading: false,),
       body: _buildBody(context),
+
     );
   }
 

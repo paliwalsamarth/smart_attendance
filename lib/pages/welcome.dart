@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_attendance/globals.dart' as globals;
 import 'package:smart_attendance/pages/student/home.dart';
 import 'package:smart_attendance/pages/teacher//home.dart';
+import 'dart:io';
 
 
 class WelcomePage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _WelcomePageState extends State<WelcomePage> {
         children: <Widget>[
           Text("Space Left for app logo and background image"),
           RaisedButton(
-            onPressed: navigateToSignIn,
+            onPressed: checkNet,
             child: Text('Log in with Institute provided details'),
 
           ),
@@ -37,7 +38,37 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
+
+  Future checkNet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        navigateToSignIn();
+      }
+    } on SocketException catch (_) {
+      debugPrint('not connected');
+
+      _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(duration: new Duration(seconds: 4), content:
+          new Row(
+            children: <Widget>[
+              new Text("Please check your internet connection!")
+            ],
+          ),
+          ));
+    }
+
+
+
+  }
+
+
+
+
+
   void navigateToSignIn(){
+
+
     _scaffoldKey.currentState.showSnackBar(
         new SnackBar(duration: new Duration(seconds: 4), content:
         new Row(

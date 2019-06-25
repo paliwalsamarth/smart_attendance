@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -124,7 +126,10 @@ class _LoginState extends State<Login> {
     final Size screenSize = MediaQuery.of(context).size;
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(),
+      appBar:AppBar(
+        title: Text('Log in'),
+        automaticallyImplyLeading: false,
+      ),
       body: Form(
           key: _formKey,
           child: Column(
@@ -167,7 +172,7 @@ class _LoginState extends State<Login> {
 
               new RoundedButton(
                 buttonName: "Get Started",
-                onTap: signIn,
+                onTap: checkNet,
                 width: screenSize.width,
                 height: 50.0,
                 bottomMargin: 10.0,
@@ -178,6 +183,12 @@ class _LoginState extends State<Login> {
           )),
     );
   }
+
+
+
+
+
+
 
   void signIn() async {
     if (_formKey.currentState.validate()) {
@@ -218,4 +229,25 @@ class _LoginState extends State<Login> {
       }
     }
   }
-}
+
+  Future checkNet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        signIn();
+      }
+    } on SocketException catch (_) {
+      debugPrint('not connected');
+
+      _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(duration: new Duration(seconds: 4), content:
+          new Row(
+            children: <Widget>[
+              new Text("Please check your internet connection!")
+            ],
+          ),
+          ));
+    }
+
+
+}}

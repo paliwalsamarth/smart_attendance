@@ -13,6 +13,7 @@ class _LaterPageState extends State<LaterPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('To be continued.'),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

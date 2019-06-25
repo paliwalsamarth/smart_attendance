@@ -59,7 +59,8 @@ class PreviousAttendanceState extends State<PreviousAttendance>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text('Attended Lectures')),
+      appBar: AppBar(title: Text('Attended Lectures'),
+        automaticallyImplyLeading: false,),
       body: _buildBody(context),
     );
   }

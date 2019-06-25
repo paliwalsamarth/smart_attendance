@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:smart_attendance/pages/screens/teacher/generate.dart';
@@ -225,11 +227,12 @@ Navigator.pop(context);
 //              onPressed: () {}),
         title: Container(
           alignment: Alignment.center,
-          child: Text("Account Details",
+          child: Text("Choose Class and Course",
               style: TextStyle(
                 color: Colors.white,
               )),
         ),
+        automaticallyImplyLeading: false,
 //          actions: <Widget>[
 //            IconButton(
 //              icon: Icon(
@@ -413,36 +416,62 @@ Navigator.pop(context);
                       ],
                     )),
                 onPressed: () async {
-                  if (selectedCourseCode != null &&
-                      selectedClassCode != "Choose Class Code") {
+                  try {
+                    final result = await InternetAddress.lookup('google.com');
+                    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                      if (selectedCourseCode != null &&
+                          selectedClassCode != "Choose Class Code") {
+                        final QuerySnapshot querySnapshot = await Firestore
+                            .instance
+                            .collection("$selectedClassCode").getDocuments();
+
+                        debugPrint(
+                            " length : ${querySnapshot.documents.length}");
 
 
+                        globals.studentId.clear();
 
-                    final QuerySnapshot querySnapshot = await Firestore.instance
-                        .collection("$selectedClassCode").getDocuments();
-
-                    debugPrint(" length : ${querySnapshot.documents.length}");
-
-
-                    globals.studentId.clear();
-
-                    for (int i = 0; i < querySnapshot.documents.length; i++) {
-                      globals.studentId.insert(
-                          i, "${querySnapshot.documents[i].documentID}");
-                    }
+                        for (int i = 0; i <
+                            querySnapshot.documents.length; i++) {
+                          globals.studentId.insert(
+                              i, "${querySnapshot.documents[i].documentID}");
+                        }
 
 
-                    globals.classCode = selectedClassCode;
-                    globals.courseCode = selectedCourseCode;
+                        globals.classCode = selectedClassCode;
+                        globals.courseCode = selectedCourseCode;
 
-                    _showDialog();
+                        _showDialog();
 
 //                            globals.startAddingStudents = 0;
 
 
+                      }
+                      else{
+                        _scaffoldKey.currentState.showSnackBar(
+                            new SnackBar(duration: new Duration(seconds: 4), content:
+                            new Row(
+                              children: <Widget>[
+                                new Text("First select from above!")
+                              ],
+                            ),
+                            ));
+                      }
+                    }
+                  } on SocketException catch (_) {
+                    debugPrint('not connected');
+
+                    _scaffoldKey.currentState.showSnackBar(
+                        new SnackBar(
+                          duration: new Duration(seconds: 4), content:
+                        new Row(
+                          children: <Widget>[
+                            new Text("Please check your internet connection!")
+                          ],
+                        ),
+                        ));
                   }
-                }
-            )
+                })
           ],
         ),
 

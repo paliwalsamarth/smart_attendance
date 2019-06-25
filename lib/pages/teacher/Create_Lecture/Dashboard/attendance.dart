@@ -24,7 +24,8 @@ class AttendanceState extends State<Attendance>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text('Live Attendance')),
+      appBar: AppBar(title: Text('Live Attendance'),
+        automaticallyImplyLeading: false,),
       body: _buildBody(context),
     );
   }

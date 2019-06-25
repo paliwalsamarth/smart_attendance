@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 //import 'package:cloud_firestore/cloud_firestore.dart';
@@ -173,6 +175,7 @@ class _TeacherState extends State<Teacher> {
         key: _scaffoldKey,
         appBar: new AppBar(
           title: new Text('Teacher Dashboard'),
+          automaticallyImplyLeading: false,
         ),
         body:
 
@@ -189,66 +192,111 @@ class _TeacherState extends State<Teacher> {
           children: <Widget>[
             new ListTile(
               title: new FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
+
+
+    try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty)
+    {
 //                                globals.studentId.clear();
 
-                    _scaffoldKey.currentState.showSnackBar(
-                        new SnackBar(duration: new Duration(seconds: 20), content:
-                        new Row(
-                          children: <Widget>[
-                            new CircularProgressIndicator(),
-                            new Text("  Loading...")
-                          ],
-                        ),
-                        ));
+      _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(duration: new Duration(seconds: 20), content:
+          new Row(
+            children: <Widget>[
+              new CircularProgressIndicator(),
+              new Text("  Loading...")
+            ],
+          ),
+          ));
 
-                    checkingPastStudentData(context);
-                  },
+      checkingPastStudentData(context);
+    }
+    } on SocketException catch (_) {
+    debugPrint('not connected');
+
+    _scaffoldKey.currentState.showSnackBar(
+    new SnackBar(duration: new Duration(seconds: 4), content:
+    new Row(
+    children: <Widget>[
+    new Text("Please check your internet connection!")
+    ],
+    ),
+    ));
+    }
+
+
+
+
+
+    }
+   ,
                   textColor: Colors.white70,
                   color: Colors.redAccent,
                   child: new Text('Start Lecture')),
             ),
             new ListTile(
               title: new FlatButton(
-                  onPressed: () {
-                    _scaffoldKey.currentState.showSnackBar(
-                        new SnackBar(duration: new Duration(seconds: 20), content:
-                        new Row(
-                          children: <Widget>[
-                            new CircularProgressIndicator(),
-                            new Text("  Loading...")
-                          ],
-                        ),
-                        ));
-Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PreviousLectures()),
-                    );
-                  },
+                  onPressed: () async {
+
+
+
+    try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    Navigator.pop(context);
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) => PreviousLectures()),
+    );
+
+    }
+    } on SocketException catch (_) {
+    debugPrint('not connected');
+
+    _scaffoldKey.currentState.showSnackBar(
+    new SnackBar(duration: new Duration(seconds: 4), content:
+    new Row(
+    children: <Widget>[
+    new Text("Please check your internet connection!")
+    ],
+    ),
+    ));
+    }}
+    ,
                   textColor: Colors.white70,
                   color: Colors.redAccent,
                   child: new Text('Previous Lectures')),
             ),
             new ListTile(
               title: new FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    try {
+                      final result = await InternetAddress.lookup('google.com');
+                      if (result.isNotEmpty &&
+                          result[0].rawAddress.isNotEmpty) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()),
+                        );
+                      }
+                    } on SocketException catch (_) {
+                      debugPrint('not connected');
 
-                    _scaffoldKey.currentState.showSnackBar(
-                        new SnackBar(duration: new Duration(seconds: 20), content:
-                        new Row(
-                          children: <Widget>[
-                            new CircularProgressIndicator(),
-                            new Text("  Loading...")
-                          ],
-                        ),
-                        ));
-Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
-                    );
+                      _scaffoldKey.currentState.showSnackBar(
+                          new SnackBar(
+                            duration: new Duration(seconds: 4), content:
+                          new Row(
+                            children: <Widget>[
+                              new Text("Please check your internet connection!")
+                            ],
+                          ),
+                          ));
+                    }
                   },
                   textColor: Colors.white70,
                   color: Colors.redAccent,

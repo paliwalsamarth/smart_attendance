@@ -35,6 +35,7 @@ class _InfoState extends State<Info> {
     return new Scaffold(
         appBar: AppBar(
           title: Text('About Lecture'),
+          automaticallyImplyLeading: false,
         ),
         body: ListView(
           children: <Widget>[
