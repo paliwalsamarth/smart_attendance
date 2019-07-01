@@ -1,16 +1,9 @@
 # smart_attendance
 
-A new Flutter application.
+A Cross Platform Attendance pplication.
 
-## Getting Started
+# Brief Description : 
+A cross platform app for a University / Institute which will convert the Classic Attendance system (which would take 10+ minutes) to a QR code based Modern System. In this the lecturer will create a session with app inputting the Course code and Class code and click a button to generate a QR code (and project the same to projector). Then the students in the class just need to scan it with the app, and they will be marked present. Also the teacher can view the live attendance and can toggle their attendance by a click. Also the teacher and students can view their pass lectures taken and attended respectively. 
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Technologies used :
+Dart, Flutter, Android-Studio.
